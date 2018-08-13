@@ -1,0 +1,40 @@
+
+
+
+     %% \choice et al. is defined in the choices environment so we have to
+     %% redefine \choice here.
+     %% Keep a pointer to \choice in \oldchoice
+     %%\let\oldchoice\choice
+     %% Redefine \choice. If we find \choice[...] then we execute \@CorrectChoice,
+     %% otherwise we execute \oldchoice
+     %%\renewcommand{\choice}{\@ifnextchar[{\@CorrectChoice}{\oldchoice}}
+     %%\def\@CorrectChoice[##1]{\CorrectChoice}
+     %% Execute the BODY, let environment choices do the typesetting
+     %%\BODY
+     
+         %\expandafter\patchcmd\csname mc@question\romannumeral \@choicenumber\endcsname{[@]}{\correctchoice}{}{\gpreto{\@temp}{\choice}} 
+         
+         
+%%%%%%%  %% We travel the list items. If an item begin with the special marker
+%%%%%%%  %% [@], we prepend it with \correctchoice, otherwise we prepend it
+%%%%%%%  %% with \choice. At the end we have all the list items prepended with
+%%%%%%%  %% either \choice or \correctchoice. Then we append the list item to
+%%%%%%%  %% the list.
+%%%%%%%  \gdef\@typesetchoices{}
+%%%%%%%  \foreach \@choicenumber in {1,...,\themc@counter} {
+%%%%%%%    %% Patchcmd doesn't like \usecs as command, so use an temporary macro with \let
+%%%%%%%    \letcs{\@temp}{mc@question\romannumeral \@choicenumber}
+%%%%%%%    \immediate\write\@auxout{\@percentchar\@choicenumber A\expandonce{\@temp}}
+%%%%%%%    %% Patch [@] for \correctchoice in \@temp, otherwise prepend \choice to \@temp
+%%%%%%%    \patchcmd{\@temp}{[@]}{\correctchoice}{}{\gpreto{\@temp}{\choice}} 
+%%%%%%%    \immediate\write\@auxout{\@percentchar\@choicenumber B\expandonce{\@temp}}
+%%%%%%%    %% \csletcs is picky about \correctchoice and \choice, so we need a litte trick here
+%%%%%%%    %%\def\@haha{\correctchoice}\let\correctchoice{\@haha}\def\@bebe{\choice}\let\choice{\@bebe}
+%%%%%%%    %% Copy temporary macro back
+%%%%%%%    %%\csletcs{mc@question\romannumeral \@choicenumber}{@temp}
+%%%%%%%    %%\immediate\write\@auxout{\@percentchar\@choicenumber C\expandonce\csuse{mc@question\romannumeral \@choicenumber}}%
+%%%%%%%    %% Add expanded once version of \@temp to the dummy list
+%%%%%%%    \xappto{\@typesetchoices}{\expandonce{\@temp}}
+%%%%%%%    %%\xappto{\@typesetchoices}{\csname mc@question\romannumeral \@choicenumber\endcsname}
+%%%%%%%  }
+%%%%%%%  %\immediate\write\@auxout{\@percentchar\expandonce{\@typesetchoices}}        
