@@ -32,13 +32,16 @@
 %%% J.E.J.opdenBrouw@hhs.nl
 
 % The newest version of this documentclass should always be available
-% from my web page: http://www-math.mit.edu/~psh/
-
+% from BitBucket: https://bitbucket.org/hhse/exam-randomizechoices/src/master/
 
 %--------------------------------------------------------------------
 %--------------------------------------------------------------------
 
 \documentclass[12pt,a4paper]{exam}
+
+\newcommand{\docversion}{0.1$\beta$}
+%\newcommand{\docdate}{November 5, 2017}
+\newcommand{\docdate}{Draft: \today}
 
 \usepackage{mathtools}
 %\usepackage{amssymb}
@@ -49,12 +52,12 @@
 \usepackage[T1]{fontenc}
 
 %% Set page layout
-\usepackage[a4paper,left=1.0in,right=1.0in,top=1.0in,bottom=1.4in,footskip=0.5in,showframe]{geometry}
+\usepackage[a4paper,left=1.0in,right=1.0in,top=1.0in,bottom=1.4in,footskip=0.5in]{geometry}
 
 %% Use package enumitem
 \usepackage{enumitem}
                    
-%% Load Ducth spelling
+%% Load English spelling
 \usepackage[english]{babel}
 
 %% Nice tables
@@ -72,18 +75,6 @@
 \usepackage[bitstream-charter]{mathdesign}
 %% Use microtype
 \usepackage[stretch=10]{microtype}
-
-%% Making captions nicer...
-\usepackage[font=footnotesize,format=plain,labelfont=bf,up,textfont=sl,up]{caption}
-
-\usepackage[labelformat=simple,font=footnotesize,format=plain,labelfont=bf,textfont=sl]{subcaption}
-\captionsetup[figure]{format=hang,justification=centering,singlelinecheck=off,skip=2ex}
-\captionsetup[table]{format=hang,justification=centering,singlelinecheck=off,skip=2ex}
-\captionsetup[subfigure]{format=hang,justification=centering,singlelinecheck=off,skip=2ex}
-\captionsetup[subtable]{format=hang,justification=centering,singlelinecheck=off,skip=2ex}
-%% Put parens around the subfig name (a) (b) etc. Needs labelformat simple
-\renewcommand\thesubfigure{(\alph{subfigure})}
-\renewcommand\thesubtable{(\alph{subtable})}
 
 \usepackage{listings}
 \usepackage{textcomp}
@@ -115,7 +106,6 @@
 
 \usepackage{titlesec}
 \usepackage{titletoc}
-\usepackage[titles]{tocloft}
 \titleformat{\section}{\fontfamily{phv}\selectfont\large\bfseries}{\thesection}{1em}{}
 \titleformat{\subsection}{\fontfamily{phv}\selectfont\bfseries}{\thesubsection}{1em}{}
 \titlespacing*{\section}{0pt}{\baselineskip}{\aftersubsection}
@@ -131,8 +121,11 @@
 %% parskip et al.                                            
 \usepackage{parskip}
 
-%%
+%% The randomization package
 \usepackage[]{exam-randomizechoices}
+
+%% Set seed
+\setrandomizerseed{1}
 
 % In case we're not using hyperref.sty:
 \providecommand{\texorpdfstring}[2]{#1}
@@ -140,35 +133,6 @@
 % without generating pdf warnings:
 \newcommand{\bs}{\texorpdfstring{\char`\\}{}}
 
-\newcommand{\docversion}{0.1}
-%\newcommand{\docdate}{November 5, 2017}
-\newcommand{\docdate}{Draft: \today}
-
-%--------------------------------------------------------------------
-%
-% Changes since version 2.4 are described in the comments
-% near the beginning of the file exam.cls.
-%
-%--------------------------------------------------------------------
-
-%\makeindex
-
-\newcommand{\indc}[1]{\index{#1@\texttt{\char`\\#1}}}
-\newcommand{\indcsub}[2]{\index{#1@\texttt{\char`\\#1}!#2}}
-\newcommand{\indcstart}[1]{\index{#1@\texttt{\char`\\#1}|(}}
-\newcommand{\indcstop}[1]{\index{#1@\texttt{\char`\\#1}|)}}
-
-\newcommand{\indt}[1]{\index{#1@\texttt{#1}}}
-\newcommand{\indtsub}[2]{\index{#1@\texttt{#1}!#2}}
-\newcommand{\indtstart}[1]{\index{#1@\texttt{#1}|(}}
-\newcommand{\indtstop}[1]{\index{#1@\texttt{#1}|)}}
-
-%---------------------------------------------------------------------
-\newenvironment{example}%
-   {\bigskip\filbreak
-    \subsubsection{Example:}
-   }%
-   {}
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -176,6 +140,8 @@
 %---------------------------------------------------------------------
 
 \begin{document}
+
+\cfoot[]{Page \thepage\ of \numpages}
 
 \title{The \texttt{exam-randomizechoices} package\\[2ex]\normalsize LaTeX package for creating random placed choices in multiple choice \\environments using the \texttt{exam} document class}
 
@@ -191,6 +157,8 @@
 
 \maketitle
 
+\thispagestyle{empty}
+
 %% We like the metric system...
 \vspace*{2cm}
 
@@ -205,9 +173,19 @@
 
 \clearpage
 
-\section{Introduction}
 
-\subsection{License}
+\section{Introduction}
+This document describes the \LaTeX\ \texttt{exam-randomizechoices} package.
+The package provides the user with four new multiple choices typesetting
+environment which place the content in a random order. It can (only) be used
+in combination with the \texttt{exam} document class. It can only
+randomize the placing of answers in multiple choices questions. The questions
+itself can't be randomized with this package.
+
+Furthermore, the package provides a simply answer key table typesetter and has
+a command for writing the answer keys to an external file.
+
+\subsection{License and warranty}
 This work may be distributed and/or modified under the
 %
 \index{Latex Project Public License@\LaTeX{} Project Public License}
@@ -224,9 +202,20 @@ This work has the LPPL maintenance status ``author-maintained''.
 This work consists of the files \texttt{exam-randomizechoices.sty},
 \texttt{exam-randomizechoices.tex} and \texttt{exam-randomizechoices-doc.tex}
 
+This software is provided `as is', without warranty of any kind,
+either expressed or implied, including, but not limited to, the
+implied warranties of merchantability and fitness for a
+particular purpose.
+
+\subsection{Where to find}
+The development version of this package is available on BitBucket. See
+
+\url{https://bitbucket.org/hhse/exam-randomizechoices/}
+
 \subsection{Acknowledgements}
 The author wishes to thank the developers of the \verb|exam| document
-class and the \verb|mcexam| package.
+class and the \verb|mcexam|, \verb|environ|, \verb|etoolbox| and \verb|pgffor|
+packages.
 
 \subsection{Warning}
 This package is experimental, so it could possibly break \LaTeX{}
@@ -237,9 +226,33 @@ Please use a recent version of the \texttt{exam} document class. This
 package is tested with version 2.603 which is available in most distributions.
 Testing with version 2.604\$beta \$ is planned.
 
+\subsection{A word about reading this document}
+This document uses terminology which is described below:
+
+\begin{itemize}
+\item If you encounter the term ``the standard multiple choice environments'',
+you should read this as ``the \texttt{choices}, \texttt{oneparchoices},
+\texttt{checkboxes} and \texttt{oneparcheckboxes} environments''.
+
+\item If you encounter the term ``the new multiple choice environments'',
+you should read this as ``the \texttt{randomizechoices}, \texttt{randomizeoneparchoices},
+\texttt{randomizecheckboxes} and \texttt{randomizeoneparcheckboxes} environments''.
+
+\item If you encounter the term ``\texttt{*choices}'', you should read this as
+``\texttt{choices}, \texttt{oneparchoices}, \texttt{randomizechoices} and \texttt{randomizeoneparchoices}''.
+
+\item If you encounter the term ``\texttt{*checkboxes}'', you should read this as
+``\texttt{checkboxes}, \texttt{oneparcheckboxes}, \texttt{randomizecheckboxes} and \texttt{randomizeoneparcheckboxes}''.
+
+\end{itemize}
+
 
 \section{Using the \texttt{exam} class}
-The \verb|exam| document class is a powerfull class to create exams
+This section provides a limited introduction to the \texttt{exam} document
+class. As a novice user, please read on. If you are a experienced user,
+you may skip this section.
+
+The \verb|exam| document class is a powerful class to create exams
 with \LaTeX{}. Both open questions and multiple choice questions are
 supported. For multiple choice questions we can differentiate between
 enumerated lists or checkbox lists. The class documentation states%
@@ -315,7 +328,7 @@ might be:
 
 which loads the \texttt{exam} document class. The paper size is set to
 A4 (297 mm $\times$ 210 mm, 11.7~in $\times$ 8.3 in), the document is
-typeset with 12 points letters and the question points are added.
+typeset with 12 points letters and the question points are calculated.
 
 
 \subsection{Typesetting multiple choice questions}
@@ -336,16 +349,21 @@ Each given choice is prepended with a label name which can be set to uppercase
 letter, lowercase letter, Roman numerals (uppercase and lowercase) and the Greek
 alphabet.
 
-\item[\texttt{checkboxes}] The given choices are typeset in a  linear, vertical list.
-Each given choice is prepended with a checkbox, which defaults to an open circle.
+\item[\texttt{checkboxes}] The given choices are typeset in a linear, vertical list.
+Each given choice is prepended with a checkbox, which defaults to a big circle. 
 
-\item[\texttt{oneparcheckboxes}] The given choices are typeset in a  linear, horizontal
+\item[\texttt{oneparcheckboxes}] The given choices are typeset in a linear, horizontal
 list. Long lists are split over multiple lines.
-Each given choice is prepended with a checkbox, which defaults to an open circle.
+Each given choice is prepended with a checkbox, which defaults to a big circle.
 
 \end{description}
 
-Examples of the four environment are given below.
+ Within the environments, the
+commands \texttt{\bs choice} and \texttt{\bs CorrectChoice} designate the
+typesetting material. The difference between the two commands is discussed
+in Section~\ref{sec:solutions}.
+
+Examples of the four environments are given below.
 
 \subsection{The \texttt{choices} environment}
 
@@ -391,7 +409,7 @@ An example of a question with the \texttt{oneparchoices} environment is:
 \end{oneparchoices}
 \end{lstlisting}
 
-which is typesets as:
+which is typeset as:
 
 \begin{questions}
 \setcounter{question}{1}
@@ -469,11 +487,13 @@ which typesets to:
 
 Other types of questions are not considered here.
 
+\subsection{Typesetting solutions}
+\label{sec:solutions}
 Please note the use of the \texttt{\bs choice} and \texttt{\bs CorrectChoice}
-command. A \texttt{\bs choice} typesets as an item in the list with no special markup.
-A \texttt{\bs CorrectChoice} typesets an item in the list with no special markup if
-the \texttt{exam} document class option \texttt{answers} is \emph{not} given, and
-typesets with special markup if the class option \texttt{answers} is given. This special
+commands. A \texttt{\bs choice} typesets as an item in the list with no special markup.
+A \texttt{\bs CorrectChoice} typesets an item in the list with special markup if
+the \texttt{exam} document class option \texttt{answers} is given, otherwise it
+typesets the same way a \texttt{\bs choice}. This special
 markup defaults to boldface for the \texttt{choices} and \texttt{oneparchoices}
 environments:
 
@@ -505,10 +525,10 @@ which is typesets as:
 \end{questions}
 
 Note that item D is typeset in boldface. The \texttt{checkboxes} and \texttt{oneparcheckboxes}
-environments use a checkmark:
+environments use a \emph{surd}\footnote{A surd is a simplistic form of a square root sign.}:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?.
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -522,7 +542,7 @@ which typesets to:
 
 \begin{questions}
 \setcounter{question}{5}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?.
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -534,7 +554,12 @@ which typesets to:
 
 \noprintanswers
 
-\section{The package}
+\section{Using the package \texttt{exam-randomizechoices}}
+Although the \texttt{exam} document class is a very powerful tool to
+create exams, it does not provide options to typeset the content of the
+standard multiple choice environments in a random order\footnote{It
+also doesn't provides options to randomize questions.}. This package
+addresses this situation.
 
 \subsection{New multiple choices environments}
 Basically, this package provides the user with four new multiple choices
@@ -550,16 +575,18 @@ environments:
 \item[\texttt{randomizecheckboxes}] This is the randomizing counterpart of the
 \texttt{checkboxes} environment. It typesets the given items in a random order.
 
-\item[\texttt{randomizeoneparcheckboxes}] This is the randomizing counterpart of the
+\item[\texttt{randomizeoneparcheckboxes}] This is the randomizing counterpart of the \linebreak
 \texttt{oneparcheckboxes} environment. It typesets the given items in a random order.
 
 \end{description}
 
-\subsection{Using the new environments}
+
+\subsection{Using the new multiple choice environments}
 We will discuss the \texttt{randomizechoices} environment only. The other
 environment work alike.
 
-When using the \texttt{randomizechoices} environment
+You can use the new multiple choice environments in the same way as the non-randomizing counterparts.
+So an example of the \texttt{randomizechoices} environment might be:
 
 \begin{lstlisting}
 \question[5] What is the result of $1+1$?.
@@ -586,9 +613,56 @@ which \emph{possibly} is typeset as:
 \end{randomizechoices}
 \end{questions}
 
-Here we can see that the resulting output is typeset in another order
+Here we can see that the resulting output is typeset in a different order
 then the choices are given. We say \emph{possibly} because the output
-depends on the state of the pseudo random generator. See Section~\ref{sec:seeding}
+depends on the state of the pseudo random generator (see Section~\ref{sec:seeding}).
+
+\subsection{Arguments to the new multiple choice environments}
+The new multiple choice environments accept (a combination of) the following optional arguments
+which are local to the environment currently being typeset:
+
+\begin{description}[labelindent=2ex]
+\item[randomize] The typesetting material is randomized. This is the default
+behaviour of the package.
+\item[norandomize] Randomization is turned off.
+Useful if you wish to see the typesetting in the given order.
+\item[keeplast] The last given item in the entered order is not part of the
+randomization process. This way you can keep the last item always the last item.
+\item[nokeeplast] The last given item is used in the randomization process. This
+is the default behaviour of the package.
+
+\end{description}
+
+Sometimes you want the last given item to stick on its place. This is useful
+if you want to use an answer item if none of the other items are correct:
+
+\begin{lstlisting}
+\question[5] What is the result of $2+5$?.
+
+\begin{randomizechoices}[keeplast]
+\choice 1
+\choice 2
+\choice 3
+\CorrectChoice None of the above answers is correct.
+\end{randomizechoices}
+\end{lstlisting}
+
+which possibly is typeset as:
+
+\begin{questions}
+\setcounter{question}{7}
+\question[5] What is the result of $1+1$?.
+
+\begin{randomizechoices}[keeplast]
+\choice 1
+\choice 2
+\choice 3
+\CorrectChoice None of the above answers is correct.
+\end{randomizechoices}
+\end{questions}
+
+Note that the last item can also be a \texttt{\bs choice} command. Also note
+that if randomization is turned off, the \texttt{keeplast} option has no effect.
 
 \subsection{Loading the package}
 The package is loaded using the well-known \texttt{\bs{usepackage}} command:
@@ -597,24 +671,51 @@ The package is loaded using the well-known \texttt{\bs{usepackage}} command:
 \usepackage[(* \emph{\textrm{option list}} *)]{exam-randomizechoices}
 \end{lstlisting}
 
+The package depends on the \texttt{exam} document class being loaded. If this
+is not the case, the package will throw an error and stops the compilation
+immediately.
+
+
+\subsection{Package options}
+
 The options in \emph{\textrm{option list}} can be any combination of:
 
 \begin{description}[labelindent=2ex]
-\item[\texttt{debug}] This option cause the package to emit a lot of debug messages
-in the log file. The messages are written to the log by the \texttt{\bs{PackageWarning}}
-command. Most IDE's such as TeXMaker will display the messages in the transcript pane.
-Debug is off by default. There is no \texttt{nodebug} option.
+\item[randomize] This option globally turns on the randomizing of the choices given for all
+available typesetting environments. Randomization is turned on by default.
 
-\item[random] This option globally turns on the randomizing of the choices given for all
-available typesetting environments. Random is turned on by default.
-
-\item[norandom] This option globally turns off the randomizing of the choices for all
-available typesetting environments. This option is usefull for inspecting the resulting
+\item[norandomize] This option globally turns off the randomizing of the choices for all
+available typesetting environments. This option is useful for inspecting the resulting
 PDF output file with typesetting the choices in the order they were entered.
+
+\item[keeplast] This option globally turns on the preservation of the last entered
+item in the new environments.
+
+\item[nokeeplast] This option globally turns off the preservation of the last entered
+item in the new environments. This is the default behaviour.
+
+\item[overload] This option makes the standard multiple choice environments behave
+the same as the new environment counterparts, i.e.\@ the the standard multiple choice
+environments are overloaded (or redefined). This is useful if you wish to use an old
+exam and randomize the answers to the questions.
+
+\item[nooverload] This option suppresses the overloading of the standard multiple choice
+environments so you have to use the new multiple choice environments if you want to
+randomize the answers to the questions. Overloading is turned off by default.
+
+\item[\texttt{debug}] This option causes the package to emit a lot of debug messages.
+The messages are written to the log file by the \texttt{\bs{PackageWarning}}
+command. Most IDE's, such as TeXMaker, will display the messages in the transcript pane.
+Debug is turned off by default. There is no \texttt{nodebug} option.
 
 \end{description}
 
-\subsection{Package options}
+If you load the package with no options, it behaves as:
+
+\begin{lstlisting}
+\usepackage[randomize,nokeeplast,nooverload]{exam-randomizechoices}
+\end{lstlisting}
+
 
 \subsection{Seeding rhe pseudo random generator}
 \label{sec:seeding}
@@ -634,44 +735,240 @@ next time you compile your document you'll see that the environment items
 have been rearranged.
 
 
-\section{Printing the key table}
+
+\subsection{Printing the key table}
 The package provides the typesetting of a basic key table in vertical direction.
 Please note that only the environments \texttt{randomizechoices},
 \texttt{randomizeoneparchoices}, \texttt{choices} (if overloaded) and
-\texttt{oneparchoices} (if overloaed) can have keys in the key table.
-The \texttt{randomizecheckboxes}, \texttt{randomizeoneparcheckboxes},
-\texttt{checkboxes} and \texttt{oneparcheckboxes} environments can't 
+\texttt{oneparchoices} (if overloaded) can have valid keys in the key table.
+The \texttt{*checkboxes} environments can't 
 have keys because of the typesetting regime used by the \texttt{exam}
 document class. The \texttt{*choices} environments are typeset as lists
 using \texttt{\bs item} which can be provided with a \texttt{\bs label}.
-The \texttt{*checkboxes} environment are typeset by skips et al. so 
+The \texttt{*checkboxes} environment are typeset by skips et al\@. so 
 labeling them would lead to a reference of the current question (or part,
 or sub part or sub-sub part). Labeling the correct choices (with the
-\texttt{\bs CorrectChoice} command is automaticly handled by the
+\texttt{\bs CorrectChoice} command) is automatically handled by the
 package.
 
-At the end of the exam, issue the command:
+At the end of the exam, issue the commands:
 
 \begin{lstlisting}
-\printkeytable
+\ifprintanswers
+   \printkeytable
+\fi
 \end{lstlisting}
 
-to print the key table. If an environment can't be labeled, the table entry
-will contain \textbf{??}, otherwise it will contain the used typeseting scheme
+to print the key table. The \texttt{\bs ifprintansers} command is only true if the
+\texttt{exam} document class \texttt{ansers} option is set, thereby preventing
+accidental typesetting the key table. If an correct choice can't be labeled, the
+table entry will contain \textbf{??}, otherwise it will contain the used typesetting scheme
 (which is \texttt{\bs Alph} by default).
 The key table is typeset using the \texttt{tabular}
 environment, so it can be wrapped in a \texttt{table} environment.
 
-\subsubsection*{Note on the external key table file}
 The key table is typeset using an external file, called \texttt{\bs jobname.keytable},
-where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling. Using
-an external file is far more easy then typesetting it directy from the package. See
-\url{https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment}
-why.
-
+where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
 The key table file can safely be deleted. It is generated each time the
 \texttt{\bs printkeytable} command is executed. Edits to the file are lost.
 
+An example of a key table is presented below. Note the \textbf{??} in the
+Answer column. This is the result of using the standard multiple choices
+environments (they are not overloaded).
+
 \printkeytable
+
+\subsection{Writing the keys to a file}
+The package provides the writing of the keys to the file \texttt{\bs jobname.keylist},
+where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
+The key list file can safely be deleted. It is generated each time the
+\texttt{\bs writekeylist} command is executed. Edits to the file are lost.
+Please note that only the environments \texttt{randomizechoices},
+\texttt{randomizeoneparchoices}, \texttt{choices} (if overloaded) and
+\texttt{oneparchoices} (if overloaded) can have valid keys in the key list.
+
+Writing a key list file is started by the command:
+
+\begin{lstlisting}
+\writekeylist{(*\textsl{\textrm{command name}}*)}
+\end{lstlisting}
+
+The command name is used in the key list file. An example of a key list file
+is presented below. In essence, the file contains a \texttt{\bs gdef} command
+that assigns the key list to the supplied command name (in this case
+\texttt{\bs mykeylist}).
+
+\lstinputlisting[caption=]{exam-randomchoices-doc.keylist}
+
+%\vspace*{2.\baselineskip}
+\newpage
+The key list itself is constructed as a comma-separated list. The question
+number and answer keys are separated with a `/'. This makes it easy to
+parse the list with PGF's \texttt{\bs foreach} command:
+
+\begin{lstlisting}
+\input{\jobname.keylist}
+
+\foreach \num/\key in \mykeylist {
+	\textcolor{red!\num0!blue} {question \num\ has key \key} \\
+}
+\end{lstlisting}
+
+results in:
+
+\input{\jobname.keylist}
+
+\foreach \num/\key in \mykeylist {
+	\textcolor{red!\num0!blue} {question \num\ has key \key} \\
+}
+
+\subsection{There should be only one correct answer}
+As stated in the title of this section, each multiple choice question
+should have one, and only one correct answer. The packages issues an
+error if a question has zero or more than one correct answer, but it
+doesn't stop compilation. If a question has no correct answer there
+will be a \textbf{??} in the printed key table and a ? in the key list
+file. If a question has two or more correct answers. The last correct
+answer being typeset will be printed in the key table and is written to
+the key list file.
+
+
+\section{Some internal details of the package}
+This section provided some internal details on the operation of the package.
+
+\subsection{Uses packages}
+The package loads the following packages
+
+\begin{description}[labelindent=2ex]
+\item[\texttt{environ}] This package is used for defining the new environments. It provides
+the powerful \texttt{NewEnviron} and \texttt{RenewEnviron} commands.
+\item[\texttt{etoolbox}] This package provides some useful commands, notably on the parsing of lists.
+\item[\texttt{pgffor}] This package provides the powerful \texttt{\bs foreach} loop
+construct. In turn, this package loads the \texttt{pgfmath} package which supplies
+the \texttt{\bs pgfmathsetseed} and \linebreak \texttt{\bs pgfmathrandominteger} commands.
+\end{description}
+
+\subsection{Defining the \texttt{randomize*} environments}
+Defining the \texttt{randomize*} environments is done with the \texttt{NewEnviron}
+and \texttt{RenewEnviron} commands. As an example we discuss the
+\texttt{randomizechoices} environment.
+
+We define this environment as follows (not overloaded):
+
+\begin{lstlisting}
+\NewEnviron{randomizechoices}[1][]{%
+
+  %% Create a random list
+  \@@createrandomlist[#1]
+
+  %% Start the choices environment
+  \begin{choices}
+    % Execute the list
+    \@typesetchoices
+  \end{choices}
+}
+\end{lstlisting}
+
+Now the \texttt{NewEnviron} command has a very useful property in that
+when expanded it places its content in the command \texttt{\bs BODY}.
+So when the environment is used as in:
+
+\begin{lstlisting}
+\begin{randomizechoices}
+\choice one
+\choice two
+\CorrectChoice three
+\choice four
+\end{randomizechoices
+\end{lstlisting}
+
+the \texttt{\bs BODY} command now contains (comments and newlines are stripped):
+
+\begin{lstlisting}
+\choice one \choice two \CorrectChoice three \choice four
+\end{lstlisting}
+
+Using the command as in:
+\begin{lstlisting}
+\BODY
+\end{lstlisting}
+
+simply expands and executes the command. Now all the \texttt{randomize*} environments
+are defined this way, so we need a generic command that parses \texttt{\bs BODY} and
+provides a command that contains the randomized version of \texttt{\bs BODY}. This is
+handled by the command \texttt{\bs @@createrandomlist}. What \texttt{\bs @@createrandomlist}
+basically does is:
+
+\begin{enumerate}
+\item Parses the supplied options and sets internal flags for later use.
+\item Replaces every occurrence of \texttt{\bs CorrectChoice} in \texttt{\bs BODY} 
+      with \texttt{\bs choice [@]}.
+\item Disassembles \texttt{\bs BODY} into a set of commands by splitting on the list
+separator \texttt{\bs choice}.
+\item Randomizes the order of the set of commands.
+\item Assembles the set of commands to the new command \texttt{\bs @typesetchoices},
+      thereby appending a \texttt{\bs label} to the correct choice. The construct
+      \texttt{\bs choice [@]} is replaced by \texttt{\bs CorrectChoice}.
+\end{enumerate}
+
+Of course this behaviour can be altered with options. For example, if the option
+\texttt{norandomize} is passed, \texttt{\bs BODY} is simply copied to
+\texttt{\bs @typesetchoices}.
+
+Please note: We need to replace \texttt{\bs CorrectChoice} with \texttt{\bs choice [@]}
+because the list parser can only handle one list separator at a time. The construct
+\texttt{[@]} is likely not to be entered by the user but if the user enters \texttt{[@]}
+directly after a \texttt{\bs choice} command, this is converted to \texttt{\bs CorrectChoice}
+in step 5. Of course this is not a bug, but a feature.
+
+After \texttt{\bs @@createrandomlist} has done it's job, the command \texttt{\bs @typesetchoices}
+is simply expanded and executed within a \texttt{choices} environment.
+
+Now if the global \texttt{overload} option is in effect, some more trickery is needed. First, a copy
+of the \texttt{choices} environment is created using \texttt{\bs let}:
+
+\begin{lstlisting}
+%% Save choices environment
+\let\@oldchoices\choices
+\let\end@oldchoices\endchoices
+\end{lstlisting}
+
+Using \texttt{\bs let} doesn't create problems, because the \texttt{choices} environment
+doesn't support options. See \url{https://tex.stackexchange.com/questions/116670/duplicating-environments}. (I hate long URL's). Next, the \texttt{\bs choices} environment is redefined:
+
+\begin{lstlisting}
+%% Renew the choices environment
+\RenewEnviron{choices}[1][]{
+
+  %% Create a random list
+  \@@createrandomlist[#1]
+
+  %% Start the choices environment
+  \begin{@oldchoices}
+     % Execute the list
+     \@typesetchoices
+  \end{@oldchoices}
+}
+\end{lstlisting}
+
+Note that now the \texttt{\bs choices} environment can handle the same options as the
+\texttt{randomizechoices} environment.
+
+\subsection{Note on the external key table file}
+The key table is typeset using an external file, called \texttt{\bs jobname.keytable},
+where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling. Using
+an external file is far more easy then typesetting it directly from the package. See
+\url{https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment}
+why. Notably the use of \texttt{\bs begin}, \texttt{\bs foreach} and \texttt{\bs hline}
+is problematic.
+
+
+\section{A personal note}
+I've been using the \texttt{exam} document class for five years now. What I like most
+is the consistent typesetting of my exams. I don't use sub parts and sub-sub parts
+because in my opinion this not the right way to prepare an exam. I've written a
+department consistent class that provides the department's cover pages and some
+other typesetting trickery. This class is used by a small core \TeX\ users. Regrettably,
+the majority of my colleagues use Word *cough*.
 
 \end{document}
