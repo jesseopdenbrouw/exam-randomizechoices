@@ -83,8 +83,8 @@
 
 %% Global random
 \newif\if@@ercgrandom\@@ercgrandomtrue
-\DeclareOption{random}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global random turned on.}\fi\@@ercgrandomtrue}
-\DeclareOption{norandom}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global random turned off.}\fi\@@ercgrandomfalse}
+\DeclareOption{randomize}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned on.}\fi\@@ercgrandomtrue}
+\DeclareOption{norandom}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned off.}\fi\@@ercgrandomfalse}
 
 %% Unknown option
 \DeclareOption*{\PackageWarning{exam-randomizechoices}{Unknown option '\CurrentOption'}}
@@ -136,8 +136,8 @@
     \fi
     \ifdefstring{\@@option}{keeplast}{\global\@@erckeeplasttrue}{}
     \ifdefstring{\@@option}{nokeeplast}{\global\@@erckeeplastfalse}{}
-    \ifdefstring{\@@option}{random}{\global\@@ercrandomtrue}{}
-    \ifdefstring{\@@option}{norandom}{\global\@@ercrandomfalse}{}
+    \ifdefstring{\@@option}{randomize}{\global\@@ercrandomtrue}{}
+    \ifdefstring{\@@option}{norandomize}{\global\@@ercrandomfalse}{}
     \ifdefstring{\@@option}{@nolabel}{\global\@@nolabeltrue}{}
   }
 
@@ -487,38 +487,80 @@
 %%
 \newcommand{\printkeytable}{
 
+  %% Open the key table file for writing and add some preface content.
   \newwrite\tempfile
   \immediate\openout\tempfile=\jobname.keytable
   \immediate\write\tempfile{\@percentchar}
-  \immediate\write\tempfile{\@percentchar\space Automaticly generated key table file}
+  \immediate\write\tempfile{\@percentchar\space Automatically generated key table file}
   \immediate\write\tempfile{\@percentchar\space written by package exam-randomizechoices}
   \immediate\write\tempfile{\@percentchar\space File written at \today\space (\number\year/\two@digits\month/\two@digits\day)} % doesn't behave well
   \immediate\write\tempfile{\@percentchar}
   \immediate\write\tempfile{\@percentchar\space Edits to this file are lost}
-  \immediate\write\tempfile{\@percentchar\space This file may savely be removed}
+  \immediate\write\tempfile{\@percentchar\space This file may safely be removed}
   \immediate\write\tempfile{\@percentchar}
-
   \immediate\write\tempfile{\string\begin{tabular} {|c|c|} }
   \immediate\write\tempfile{\string\hline }
   \immediate\write\tempfile{Question & Answer \cr \string\hline}
-  
+
+  %% Write the table entries.  
   \foreach \x in {1,...,\thequestion} {
-    \immediate\write\tempfile{\string\ref{question@\x} & }  
     \@ifundefined{r@question@\x @correctchoice}{%
       %not found
-      \immediate\write\tempfile{\string\textbf{??} \cr}
+      \immediate\write\tempfile{\string\ref{question@\x} & \string\textbf{??} \cr}
     }{%
       %found
-      \immediate\write\tempfile{\string\ref{question@\x @correctchoice} \cr}
+      \immediate\write\tempfile{\string\ref{question@\x} & \string\ref{question@\x @correctchoice} \cr}
+    }%
+  }
+  
+  %% Write prologue content and close the file
+  \immediate\write\tempfile{\string\hline }
+  \immediate\write\tempfile{\string\end{tabular} }
+  \immediate\write\tempfile{\string\endinput}
+  \immediate\closeout\tempfile
+
+  %% Input the file to typeset the table.
+  \input{\jobname.keytable}
+}
+
+%%
+%% Simple key list file writer
+%%
+\def\writekeylist#1{
+
+  \gdef\mymacro{#1}
+  %% Open the key list file for writing and add some preface content.
+  \newwrite\tempfile
+  \immediate\openout\tempfile=\jobname.keylist
+  \immediate\write\tempfile{\@percentchar}
+  \immediate\write\tempfile{\@percentchar\space Automatically generated key list file}
+  \immediate\write\tempfile{\@percentchar\space written by package exam-randomizechoices}
+  \immediate\write\tempfile{\@percentchar\space File written at \today\space (\number\year/\two@digits\month/\two@digits\day)} % doesn't behave well
+  \immediate\write\tempfile{\@percentchar}
+  \immediate\write\tempfile{\@percentchar\space Edits to this file are lost}
+  \immediate\write\tempfile{\@percentchar\space This file may safely be removed}
+  \immediate\write\tempfile{\@percentchar}
+
+  %% Create a command that has all the question numbers / questio keys
+  %% separated by a /
+  \gdef\@keylist{\@gobble}
+  %% Write the list entries.  
+  \foreach \x in {1,...,\thequestion} {
+    \@ifundefined{r@question@\x @correctchoice}{%
+      %not found
+      \xdef\@keylist{\@keylist,\x/?}
+    }{%
+      %found
+      \xdef\@keylist{\@keylist,\x/\getrefnumber{question@\x @correctchoice}}
     }%
   }
 
-  \immediate\write\tempfile{\string\hline }
-  \immediate\write\tempfile{\string\end{tabular} }
-
+  %% Write the gdef with key list in one write. This prevents Latex to
+  %% add end-of-line characters. After that, close the file. 
+  \immediate\write\tempfile{\string\gdef\expandafter\string\mymacro\@charlb\@keylist\@charrb}
+  \immediate\write\tempfile{\string\endinput}
   \immediate\closeout\tempfile
-
-  \input{\jobname.keytable}
 }
+
 
 \endinput
