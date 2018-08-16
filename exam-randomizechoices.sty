@@ -26,8 +26,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 %% Version and date
-\gdef\fileversion{0.1}
-\gdef\filedate{2018/08/13}
+\gdef\fileversion{0.1$\gamma$}
+\gdef\filedate{2018/08/16}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -36,7 +36,7 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ProvidesPackage{exam-randomizechoices}[\filedate\space V\fileversion\space
-      LaTeX package for creating random placed choices exams using the exam class]
+ LaTeX package for creating random placed choices in multiple choice environments using the exam document class]
 
 \PackageWarning{exam-randomizechoices}{THIS PACKAGE IS EXPERIMENTAL.}
 
@@ -57,9 +57,9 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % http://ctan.org/pkg/{environ,etoolbox,pgffor}
-\@ifpackageloaded{environ}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package environ already loaded.}\fi}{\RequirePackage{environ}}
-\@ifpackageloaded{etoolbox}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package etoolbox already loaded.}\fi}{\RequirePackage{etoolbox}}
-\@ifpackageloaded{pgffor}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package pgffor already loaded.}\fi}{\RequirePackage{pgffor}}
+\@ifpackageloaded{environ}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package environ already loaded}\fi}{\RequirePackage{environ}}
+\@ifpackageloaded{etoolbox}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package etoolbox already loaded}\fi}{\RequirePackage{etoolbox}}
+\@ifpackageloaded{pgffor}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package pgffor already loaded}\fi}{\RequirePackage{pgffor}}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,26 +69,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Want debug messages
 \newif\if@@ercdebug\@@ercdebugfalse
-\DeclareOption{debug}{\PackageWarning{exam-randomizechoices}{Debug turned on.}\@@ercdebugtrue}
+\DeclareOption{debug}{\PackageWarning{exam-randomizechoices}{Debug turned on}\@@ercdebugtrue}
 
 %% Want to overload or not overload the *choices and *checkboxes environments?
 \newif\if@@ercoverload\@@ercoverloadfalse
-\DeclareOption{overload}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Overload turned on.}\fi\@@ercoverloadtrue}
-\DeclareOption{nooverload}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Overload turned off.}\fi\@@ercoverloadfalse}
+\DeclareOption{overload}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Overload turned on}\fi\@@ercoverloadtrue}
+\DeclareOption{nooverload}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Overload turned off}\fi\@@ercoverloadfalse}
 
 %% Global keeplast
 \newif\if@@ercgkeeplast\@@ercgkeeplastfalse
-\DeclareOption{keeplast}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global keeplast turned on.}\fi\@@ercgkeeplasttrue}
-\DeclareOption{nokeeplast}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global keeplast turned off.}\fi\@@ercgkeeplastfalse}
+\DeclareOption{keeplast}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global keeplast turned on}\fi\@@ercgkeeplasttrue}
+\DeclareOption{nokeeplast}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global keeplast turned off}\fi\@@ercgkeeplastfalse}
 
 %% Global random
 \newif\if@@ercgrandom\@@ercgrandomtrue
-\DeclareOption{randomize}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned on.}\fi\@@ercgrandomtrue}
-\DeclareOption{norandom}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned off.}\fi\@@ercgrandomfalse}
+\DeclareOption{randomize}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned on}\fi\@@ercgrandomtrue}
+\DeclareOption{norandomize}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Global randomization turned off}\fi\@@ercgrandomfalse}
+
+%% Use ordinal numbering
+\newif\iferc@@refcheckboxes\erc@@refcheckboxesfalse
+\DeclareOption{refcheckboxes}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Reference checkboxes turned on.}\fi\erc@@refcheckboxestrue}
+\DeclareOption{norefcheckboxes}{\if@@ercdebug\PackageWarning{exam-randomizechoices}{Reference checkboxes turned off.}\fi\erc@@refcheckboxesfalse}
 
 %% Unknown option
 \DeclareOption*{\PackageWarning{exam-randomizechoices}{Unknown option '\CurrentOption'}}
 \ProcessOptions\relax
+
+%% A scratch counter
+\newcounter{erc@counter}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,7 +110,77 @@
 	\global\@@seedsettrue
 }
 
-%\tracingpatches
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                       %%
+%% Ordinal numbering scheme for the checkboxes and       %%
+%% oneparscheckboxes environments when using \ref et al. %%
+%%                                                       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iferc@@refcheckboxes
+  \newcounter{checkbox}
+  \renewcommand\thecheckbox{\ordinal{checkbox}}
+  %\renewcommand\thecheckbox{\Alph{checkbox}}
+  \newcommand\checkboxlabel{\thecheckbox.}
+  \def\erc@textsuperscript#1{$^\text{#1}$}
+
+  %\show\thecheckbox
+  %\show\@oldoneparcheckboxes
+
+  \def\ordinal#1{\expandafter\lc@ordinal\csname c@#1\endcsname}
+  \def\lc@ordinal#1{%
+    \ifcase #1\or 1\erc@textsuperscript{st}\or  2\erc@textsuperscript{nd}\or
+                  3\erc@textsuperscript{rd}\or  4\erc@textsuperscript{th}\or
+                  5\erc@textsuperscript{th}\or  6\erc@textsuperscript{th}\or
+                  7\erc@textsuperscript{th}\or  8\erc@textsuperscript{th}\or
+                  9\erc@textsuperscript{th}\or 10\erc@textsuperscript{th}\or
+                 11\erc@textsuperscript{th}\or 12\erc@textsuperscript{th}\or
+                 13\erc@textsuperscript{th}\or 14\erc@textsuperscript{th}\or
+                 15\erc@textsuperscript{th}\or 16\erc@textsuperscript{th}\or
+                 17\erc@textsuperscript{th}\or 18\erc@textsuperscript{th}\or
+                 19\erc@textsuperscript{th}\or 20\erc@textsuperscript{th}\or
+                 21\erc@textsuperscript{st}\or 22\erc@textsuperscript{nd}\or
+                 23\erc@textsuperscript{rd}\or 24\erc@textsuperscript{th}\or
+                 25\erc@textsuperscript{th}\or 26\erc@textsuperscript{th}
+                   \else \@ctrerr
+    \fi
+  }%
+
+  %% Start patching the standard *checkboxes environment
+
+  \setcounter{erc@counter}{0}
+  %% Counter for counting the number of correct choices
+  \def\@incr{\stepcounter{erc@counter}}
+  \patchcmd{\oneparcheckboxes}{\setcounter{choice}}{\setcounter{checkbox}}{\@incr}{}
+
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+%  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+
+    \PackageWarning{test}{Applied \theerc@counter\space patches}
+
+
+  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
+  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
+%  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
+
+    \PackageWarning{test}{Applied \theerc@counter\space patches}
+
+%  \show\checkboxes
+  \patchcmd{\checkboxes}{\settowidth }{\usecounter {checkbox}\def\makelabel##1{\hss\llap{##1}} \settowidth }{\@incr}{}
+  \patchcmd{\checkboxes}{\item [\checked@char ]}{\refstepcounter {checkbox} \item [\checked@char ]}{\@incr}{}
+%  \show\checkboxes
+  %% End patching the standard *checkboxes environment
+
+  \ifnum \theerc@counter=9
+    \PackageWarning{test}{Applied \theerc@counter\space patches}
+  \else
+    \PackageError{test}{Patching failed, Applied \theerc@counter\space patches but it should have been 9. I can't continue. Sorry}{There should have been 9 patches applied. So if this fails, the definition of the checkboxes and oneparcheckboxes environment have changed since exam class version 2.603. Please contact the author of this package.}
+    \stop
+  \fi
+\fi
+
 
 %%
 %% \@@createrandomlist
@@ -114,7 +192,6 @@
 %%
 %% Ideas taken from the mcexam package, see https://ctan.org/pkg/mcexam
 
-\newcounter{mc@counter}
 \newcounter{@nrcorrectchoices}
 
 \newif\if@@erckeeplast
@@ -122,17 +199,35 @@
 \newif\if@@nolabel
 \newcommand{\@@createrandomlist}[1][]{
 
+  \if@@ercdebug
+    \PackageWarning{exam-randomizechoices}{Parsing question \thequestion}
+  \fi
+
   %% Copy the global package options
   \if@@ercgkeeplast\@@erckeeplasttrue\else\@@erckeeplastfalse\fi
   \if@@ercgrandom\@@ercrandomtrue\else\@@ercrandomfalse\fi
 
   %% Check if label can be used
   \@@nolabelfalse
+
+  %% Check if the user has defined our special command
+  \ifdefined\inaccessible
+    \if@@ercdebug
+      \PackageWarning{exam-randomizechoices}{You should NOT define \noexpand\inaccessible}
+    \else
+      \PackageError{exam-randomizechoices}{You should NOT define \noexpand\inaccessible. Emergency stop!}{Somewhere in your document, you have defined the macro \noexpand\inaccessible. This package relies on the fact that this macro is not defined. Please use another macro name instead. I have to stop now. Sorry.}
+      \stop
+    \fi
+  \fi
+
+  %% This list to typeset
+  \gdef\@typesetchoices{}
+  \def\@incr{\stepcounter{@nrcorrectchoices}}
   
   %% Parse options to question
   \foreach \@@option in {#1} {
     \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{I found option: \@@option.}
+      \PackageWarning{exam-randomizechoices}{I found option: \@@option}
     \fi
     \ifdefstring{\@@option}{keeplast}{\global\@@erckeeplasttrue}{}
     \ifdefstring{\@@option}{nokeeplast}{\global\@@erckeeplastfalse}{}
@@ -141,125 +236,120 @@
     \ifdefstring{\@@option}{@nolabel}{\global\@@nolabeltrue}{}
   }
 
-  %% If we should randomize...
+  %% Counter for counting the number of choices
+  \setcounter{erc@counter}{-1}
+  %% Counter for counting the number of correct choices
+  \setcounter{@nrcorrectchoices}{0}
+
+  %% Patch \BODY, \correctchoice and \CorrectChoice are replaced by \choice \inaccessible
+  %% We need to do this for the following step, which is splitting the list
+  %% into list items, because the list parser can only handle one separator at
+  %% a time.
+  \newbool{@@stillpatching}
+  \booltrue{@@stillpatching} 
+  \whileboolexpr{ test {\ifbool{@@stillpatching}}}{%
+    \patchcmd{\BODY}{\CorrectChoice}{\choice \inaccessible }{\@incr}{\boolfalse{@@stillpatching}}
+  }
+  \booltrue{@@stillpatching} 
+  \whileboolexpr{ test {\ifbool{@@stillpatching}}}{%
+    \patchcmd{\BODY}{\correctchoice}{\choice \inaccessible }{\@incr}{\boolfalse{@@stillpatching}}
+  }
+	
+  %% We need exactly one \CorrectChoice, so throw an error if not.
+  \ifnum \the@nrcorrectchoices=1\relax\else
+    \PackageError{exam-randomizechoices}{You need exactly one \string\CorrectChoice, I found \the@nrcorrectchoices\space in question \thequestion}{Sorry.}
+  \fi
+
+  % Declare list \erc@@list and separator \choice
+  \DeclareListParser{\erc@@list}{\choice}
+  % Declare list iterator command
+  \renewcommand\do[1]{
+    \stepcounter{erc@counter}
+    \long\csgdef{erc@answer\roman{erc@counter}}{##1}
+  }
+  % Put an \@empty in front of \BODY and create the list
+  \expandafter\erc@@list\expandafter{\expandafter\@empty\BODY}
+	
+  % Emit the number of choices found, error if less than two.
+  \ifnum \theerc@counter<2\relax
+    \PackageError{exam-randomizechoices}{You need at least two choices in question \thequestion}{Sorry.}
+  \else
+    \if@@ercdebug
+      \PackageWarning{exam-randomizechoices}{I found \theerc@counter\space choices}
+    \fi
+  \fi
+	
+  %% Check if there is text before the first \choice, \CorrectChoice or \correctchoice
+  %% and emit an error if so.
+  \setbox0=\hbox{\csuse{erc@answer}\unskip}
+  \ifdim\wd0=0pt\else
+    \PackageError{exam-randomizechoices}{Something's wrong, perhaps a missing \string\choice\space or \string\CorrectChoice\space or \string\correctchoice\space in question \thequestion}{You cannot have text before the first \string\choice, \string\CorrectChoice\space or \string\correctchoice.}
+  \fi
+	
+  %% Create a set of macros in the form of \erc@answerTempnum<number> where
+  %% we keep track of the choicenumbers.  
+  \foreach \a in {1,...,\theerc@counter}{
+    \csxdef{erc@answerTempnum\a}{\a}
+  }
+
+  %% If randomize question...
   \if@@ercrandom
+    %% If we should randomize...
     \if@@ercdebug
       \PackageWarning{exam-randomizechoices}{Randomizing...}
     \fi
-    
-    %% Counter for counting the number of choices
-    \setcounter{mc@counter}{-1}
-    %% Counter for counting the number of correct choices
-    \setcounter{@nrcorrectchoices}{0}
-    \def\@incr{\stepcounter{@nrcorrectchoices}}
 
-    %% Patch \BODY, \correctchoice and \CorrectChoice are replaced by \choice[@]
-    %% We need to do this for the following step, which is splitting the list
-    %% into list items, because the list parser can only handle one separator at
-    %% a time.
-    \newbool{@@stillpatching}
-    \booltrue{@@stillpatching} 
-    \whileboolexpr{ test {\ifbool{@@stillpatching}}}{%
-      \patchcmd{\BODY}{\CorrectChoice}{\choice[@]}{\@incr}{\boolfalse{@@stillpatching}}
-    }
-    \booltrue{@@stillpatching} 
-    \whileboolexpr{ test {\ifbool{@@stillpatching}}}{%
-      \patchcmd{\BODY}{\correctchoice}{\choice[@]}{\@incr}{\boolfalse{@@stillpatching}}
-    }
-	
-    %% We need exactly one \CorrectChoice, so throw an error if not.
-    \ifnum \the@nrcorrectchoices=1\relax\else
-      \PackageError{exam-randomizechoices}{You need exactly one \string\CorrectChoice, I found \the@nrcorrectchoices}{Sorry.}
-    \fi
-	
-    % Declare list \@@xyz and separator \choice
-    \DeclareListParser{\@@xyz}{\choice}
-    % Declare list iterator command
-    \renewcommand\do[1]{
-      \stepcounter{mc@counter}
-      \long\csgdef{mc@answer\roman{mc@counter}}{##1}
-    }
-    % Put an \@empty in front of \BODY and create the list
-    \expandafter\@@xyz\expandafter{\expandafter\@empty\BODY}
-	
-    % Emit the number of choices found.
-    \ifnum \themc@counter<2\relax
-      \PackageError{exam-randomizechoices}{You need at least two choices.}{Sorry.}
-    \else
-      \if@@ercdebug
-        \PackageWarning{exam-randomizechoices}{I found \themc@counter\space choices for question \thequestion}
-      \fi
-	\fi
-	
-    %% Check if there is text before the first \choice, \CorrectChoice or \correctchoice
-    %% and emit an error if so.
-    \setbox0=\hbox{\csuse{mc@answer}\unskip}
-    \ifdim\wd0=0pt\else
-      \PackageError{exam-randomizechoices}{Something's wrong, perhaps a missing \string\choice\space or \string\CorrectChoicce\space or \string\correctchoice.}{You cannot have text before the first \string\choice, \string\CorrectChoice\space or \string\correctchoice.}
-    \fi
-	
-    %% Create a set of macros in the form of \mc@answerTempnum<number> where
-    %% we keep track of the choicenumbers.  
-    \foreach \a in {1,...,\themc@counter}{
-      \csxdef{mc@answerTempnum\a}{\a}
-	}
-	
     %% We need to perform a number of swaps to perform randomization
-    %% We do this on the \mc@answerTempnum<number> macros because it's
+    %% We do this on the \erc@answerTempnum<number> macros because it's
     %% a pain to do it on the choices itself
-    \numdef\@numberofswaps{\themc@counter-1}
-	
+    \numdef\@numberofswaps{\theerc@counter-1}
+
+    %% User didn't set the seed	
 	\if@@seedset
 	\else
 	  \PackageWarning{exam-randomizechoices}{You didn't set the randomizer seed}
 	\fi
+
     %% Randomize the choice number list  
     \foreach \x in {1,...,\@numberofswaps} {
       \if@@erckeeplast
         \pgfmathrandominteger{\r}{\x}{\@numberofswaps}
       \else
-	    \pgfmathrandominteger{\r}{\x}{\themc@counter}
+	    \pgfmathrandominteger{\r}{\x}{\theerc@counter}
       \fi
 	     
-      %\immediate\write\@auxout{\@percentchar \expandonce{\r}} 
-      \letcs\@temp{mc@answerTempnum\x}   
-      \global\csletcs{mc@answerTempnum\x}{mc@answerTempnum\r}
-      \global\cslet{mc@answerTempnum\r}{\@temp}
+      % Swap the items
+      \letcs\@temp{erc@answerTempnum\x}   
+      \global\csletcs{erc@answerTempnum\x}{erc@answerTempnum\r}
+      \global\cslet{erc@answerTempnum\r}{\@temp}
     }
-	
-    %% We travel the list items. If an item begin with the special marker
-    %% [@], we prepend it with \correctchoice, otherwise we prepend it
-    %% with \choice. At the end we have all the list items prepended with
-    %% either \choice or \correctchoice. Then we append the list item to
-    %% the list.
-    \gdef\@typesetchoices{}
-    \foreach \@choicenumber in {1,...,\themc@counter} {
-      %% Patchcmd doesn't like \usecs as command, so use an temporary macro with \let
-      \letcs{\@@tempnr}{mc@answerTempnum\@choicenumber}
-      %\immediate\write\@auxout{\@percentchar A \expandonce{\@@tempnr}} 
-      \letcs{\@temp}{mc@answer\romannumeral \@@tempnr}
-      %% Patch [@] for \correctchoice in \@temp, otherwise prepend \choice to \@temp
-      \if@@nolabel
-        \patchcmd{\@temp}{[@]}{\correctchoice }{}{\gpreto{\@temp}{\choice}} 
-      \else
-        \patchcmd{\@temp}{[@]}{\correctchoice \label{question@\thequestion @correctchoice}}{}{\gpreto{\@temp}{\choice}} 
-      \fi
-      %% Add expanded once version of \@temp to the dummy list
-      \xappto{\@typesetchoices}{\expandonce{\@temp}}
-    }
-    %\immediate\write\@auxout{\@percentchar \expandonce{\@typesetchoices}}
-
     \if@@ercdebug
       \PackageWarning{exam-randomizechoices}{Done randomizing...}
     \fi
 
-  \else
-    %% No randomization
-    \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{Just dumping the body...}
+  \fi	
+
+  %% We travel the list items. If an item begin with the special marker
+  %% \inaccessible, we prepend it with \correctchoice, otherwise we prepend it
+  %% with \choice. At the end we have all the list items prepended with
+  %% either \choice or \correctchoice. Then we append the list item to
+  %% the list.
+  \foreach \@choicenumber in {1,...,\theerc@counter} {
+    %% Patchcmd doesn't like \usecs as command, so use an temporary macro with \let
+    \letcs{\@@tempnr}{erc@answerTempnum\@choicenumber}
+    %\immediate\write\@auxout{\@percentchar A \expandonce{\@@tempnr}} 
+    \letcs{\@temp}{erc@answer\romannumeral \@@tempnr}
+    %% Patch \inaccessible for \correctchoice in \@temp, otherwise prepend \choice to \@temp
+    \if@@nolabel
+      \patchcmd{\@temp}{\inaccessible }{\correctchoice }{}{\gpreto{\@temp}{\choice}} 
+    \else
+      \patchcmd{\@temp}{\inaccessible}{\correctchoice \label{question@\thequestion @correctchoice}}{}{\gpreto{\@temp}{\choice}} 
     \fi
-    \xappto{\@typesetchoices}{\expandonce{\BODY}}
-  \fi
+    %% Add expanded once version of \@temp to the dummy list
+    \xappto{\@typesetchoices}{\expandonce{\@temp}}
+  }
+  %\immediate\write\@auxout{\@percentchar \expandonce{\@typesetchoices}}
+
 }
 
 
@@ -279,7 +369,7 @@
 
 \if@@ercoverload
   \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{Overloading choices environment.}
+      \PackageWarning{exam-randomizechoices}{Overloading choices environment}
   \fi
 
   %% Save choices environment
@@ -329,7 +419,7 @@
 %%
 \if@@ercoverload
   \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{Overloading oneparchoices environment.}
+      \PackageWarning{exam-randomizechoices}{Overloading oneparchoices environment}
   \fi
 
   %% Save oneparchoices environment
@@ -364,8 +454,11 @@
 \else
   \NewEnviron{randomizeoneparchoices}[1][]{%
 
+    \immediate\write\@auxout{\@percentchar: \expandonce{\BODY}}
+ping
     %% Create a random list
     \@@createrandomlist[#1]
+    
 
     %% Start the oneparchoices environment
     \begin{oneparchoices}
@@ -380,7 +473,7 @@
 %%
 \if@@ercoverload
   \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{Overloading checkboxes environment.}
+      \PackageWarning{exam-randomizechoices}{Overloading checkboxes environment}
   \fi
 
   %% Save choices environment
@@ -431,7 +524,7 @@
 %%
 \if@@ercoverload
   \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{Overloading oneparcheckboxes environment.}
+      \PackageWarning{exam-randomizechoices}{Overloading oneparcheckboxes environment}
   \fi
 
   %% Save oneparcheckboxes environment
@@ -502,18 +595,21 @@
   \immediate\write\tempfile{\string\hline }
   \immediate\write\tempfile{Question & Answer \cr \string\hline}
 
-  %% Write the table entries.  
-  \foreach \x in {1,...,\thequestion} {
-    \@ifundefined{r@question@\x @correctchoice}{%
-      %not found
-      \immediate\write\tempfile{\string\ref{question@\x} & \string\textbf{??} \cr}
-    }{%
-      %found
-      \immediate\write\tempfile{\string\ref{question@\x} & \string\ref{question@\x @correctchoice} \cr}
-    }%
-  }
+  %% Write the table entries.
+  \ifnum\thequestion=0\relax
+  \else
+    \foreach \x in {1,...,\thequestion} {
+      \@ifundefined{r@question@\x @correctchoice}{%
+        %not found
+        \immediate\write\tempfile{\string\ref{question@\x} & \string\textbf{??} \cr}
+      }{%
+        %found
+        \immediate\write\tempfile{\string\ref{question@\x} & \string\ref{question@\x @correctchoice} \cr}
+      }%
+    }
+  \fi 
   
-  %% Write prologue content and close the file
+  %% Write epilogue content and close the file
   \immediate\write\tempfile{\string\hline }
   \immediate\write\tempfile{\string\end{tabular} }
   \immediate\write\tempfile{\string\endinput}
@@ -528,7 +624,7 @@
 %%
 \def\writekeylist#1{
 
-  \gdef\mymacro{#1}
+  \def\erc@macroname{#1}
   %% Open the key list file for writing and add some preface content.
   \newwrite\tempfile
   \immediate\openout\tempfile=\jobname.keylist
@@ -543,24 +639,27 @@
 
   %% Create a command that has all the question numbers / questio keys
   %% separated by a /
-  \gdef\@keylist{\@gobble}
-  %% Write the list entries.  
-  \foreach \x in {1,...,\thequestion} {
-    \@ifundefined{r@question@\x @correctchoice}{%
-      %not found
-      \xdef\@keylist{\@keylist,\x/?}
-    }{%
-      %found
-      \xdef\@keylist{\@keylist,\x/\getrefnumber{question@\x @correctchoice}}
-    }%
-  }
+  \gdef\erc@keylist{\@gobble}
+  %% Write the list entries.
+  \ifnum\thequestion=0\relax
+    \gdef\erc@keylist{}
+  \else
+    \foreach \x in {1,...,\thequestion} {
+      \@ifundefined{r@question@\x @correctchoice}{%
+        %not found
+        \xdef\erc@keylist{\erc@keylist,\x/?}
+      }{%
+        %found
+       \xdef\erc@keylist{\erc@keylist,\x/\getrefnumber{question@\x @correctchoice}}
+      }%
+    }
+  \fi
 
   %% Write the gdef with key list in one write. This prevents Latex to
   %% add end-of-line characters. After that, close the file. 
-  \immediate\write\tempfile{\string\gdef\expandafter\string\mymacro\@charlb\@keylist\@charrb}
+  \immediate\write\tempfile{\string\gdef\expandafter\string\erc@macroname\@charlb\erc@keylist\@charrb}
   \immediate\write\tempfile{\string\endinput}
   \immediate\closeout\tempfile
 }
-
 
 \endinput
