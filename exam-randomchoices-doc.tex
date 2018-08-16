@@ -39,7 +39,7 @@
 
 \documentclass[12pt,a4paper]{exam}
 
-\newcommand{\docversion}{0.1$\beta$}
+\newcommand{\docversion}{0.1$\gamma$}
 %\newcommand{\docdate}{November 5, 2017}
 \newcommand{\docdate}{Draft: \today}
 
@@ -176,11 +176,11 @@
 
 \section{Introduction}
 This document describes the \LaTeX\ \texttt{exam-randomizechoices} package.
-The package provides the user with four new multiple choices typesetting
+The package provides the user with four new multiple choice typesetting
 environment which place the content in a random order. It can (only) be used
 in combination with the \texttt{exam} document class. It can only
-randomize the placing of answers in multiple choices questions. The questions
-itself can't be randomized with this package.
+randomize the placing of choices in multiple choice questions. The questions
+can't be randomized with this package.
 
 Furthermore, the package provides a simply answer key table typesetter and has
 a command for writing the answer keys to an external file.
@@ -328,7 +328,7 @@ might be:
 
 which loads the \texttt{exam} document class. The paper size is set to
 A4 (297 mm $\times$ 210 mm, 11.7~in $\times$ 8.3 in), the document is
-typeset with 12 points letters and the question points are calculated.
+typeset with a 12 points font and the question points are calculated.
 
 
 \subsection{Typesetting multiple choice questions}
@@ -370,7 +370,7 @@ Examples of the four environments are given below.
 An example of a question with the \texttt{choices} environment is:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+1$?.
+\question[5] What is the result of $1+1$?
 
 \begin{choices}
 \choice 1
@@ -384,7 +384,7 @@ which is typeset as:
 
 \begin{questions}
 \setcounter{question}{0}
-\question[5] What is the result of $1+1$?.
+\question[5] What is the result of $1+1$?
 
 \begin{choices}
 \choice 1
@@ -399,7 +399,7 @@ which is typeset as:
 An example of a question with the \texttt{oneparchoices} environment is:
 
 \begin{lstlisting}
-\question[5] What is the result of $2+2$?..
+\question[5] What is the result of $2+2$?
 
 \begin{oneparchoices}
 \choice 1
@@ -413,7 +413,7 @@ which is typeset as:
 
 \begin{questions}
 \setcounter{question}{1}
-\question[5] What is the result of $2+2$?..
+\question[5] What is the result of $2+2$?
 
 \begin{oneparchoices}
 \choice 1
@@ -431,7 +431,7 @@ checkbox questions.
 An example of a vertically aligned checkbox environment is:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?
 
 \begin{checkboxes}
 \choice 1
@@ -445,7 +445,7 @@ which typesets to:
 
 \begin{questions}
 \setcounter{question}{2}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?
 
 \begin{checkboxes}
 \choice 1
@@ -461,7 +461,7 @@ The \texttt{oneparcheckboxes} environment typesets the choices
 in al linear, horizontal way. An example is given below:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -475,7 +475,7 @@ which typesets to:
 
 \begin{questions}
 \setcounter{question}{3}
-\question[5] What is the result of $1+2$?..
+\question[5] What is the result of $1+2$?
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -498,7 +498,7 @@ markup defaults to boldface for the \texttt{choices} and \texttt{oneparchoices}
 environments:
 
 \begin{lstlisting}
-\question[5] What is the result of $2+2$?..
+\question[5] What is the result of $2+2$?
 
 \begin{choices}
 \choice 1
@@ -514,7 +514,7 @@ which is typesets as:
 
 \begin{questions}
 \setcounter{question}{4}
-\question[5] What is the result of $2+2$?..
+\question[5] What is the result of $2+2$?
 
 \begin{choices}
 \choice 1
@@ -528,7 +528,7 @@ Note that item D is typeset in boldface. The \texttt{checkboxes} and \texttt{one
 environments use a \emph{surd}\footnote{A surd is a simplistic form of a square root sign.}:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+2$?.
+\question[5] What is the result of $1+2$?
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -542,7 +542,7 @@ which typesets to:
 
 \begin{questions}
 \setcounter{question}{5}
-\question[5] What is the result of $1+2$?.
+\question[5] What is the result of $1+2$?
 
 \begin{oneparcheckboxes}
 \choice 1
@@ -561,8 +561,8 @@ standard multiple choice environments in a random order\footnote{It
 also doesn't provides options to randomize questions.}. This package
 addresses this situation.
 
-\subsection{New multiple choices environments}
-Basically, this package provides the user with four new multiple choices
+\subsection{New multiple choice environments}
+Basically, this package provides the user with four new multiple choice
 environments:
 
 \begin{description}[labelindent=2ex]
@@ -589,7 +589,7 @@ You can use the new multiple choice environments in the same way as the non-rand
 So an example of the \texttt{randomizechoices} environment might be:
 
 \begin{lstlisting}
-\question[5] What is the result of $1+1$?.
+\question[5] What is the result of $1+1$?
 
 \begin{randomizechoices}
 \choice 1
@@ -603,7 +603,7 @@ which \emph{possibly} is typeset as:
 
 \begin{questions}
 \setcounter{question}{6}
-\question[5] What is the result of $1+1$?.
+\question[5] What is the result of $1+1$?
 
 \begin{randomizechoices}
 \choice 1
@@ -634,10 +634,10 @@ is the default behaviour of the package.
 \end{description}
 
 Sometimes you want the last given item to stick on its place. This is useful
-if you want to use an answer item if none of the other items are correct:
+if you want to use an choice item if none of the other choices are correct:
 
 \begin{lstlisting}
-\question[5] What is the result of $2+5$?.
+\question[5] What is the result of $2+5$?
 
 \begin{randomizechoices}[keeplast]
 \choice 1
@@ -651,13 +651,13 @@ which possibly is typeset as:
 
 \begin{questions}
 \setcounter{question}{7}
-\question[5] What is the result of $1+1$?.
+\question[5] What is the result of $1+1$?
 
 \begin{randomizechoices}[keeplast]
 \choice 1
 \choice 2
 \choice 3
-\CorrectChoice None of the above answers is correct.
+\CorrectChoice None of the above answers are correct.
 \end{randomizechoices}
 \end{questions}
 
@@ -671,7 +671,7 @@ The package is loaded using the well-known \texttt{\bs{usepackage}} command:
 \usepackage[(* \emph{\textrm{option list}} *)]{exam-randomizechoices}
 \end{lstlisting}
 
-The package depends on the \texttt{exam} document class being loaded. If this
+The package depends on the \texttt{exam} document class being loaded beforehand. If this
 is not the case, the package will throw an error and stops the compilation
 immediately.
 
@@ -697,11 +697,11 @@ item in the new environments. This is the default behaviour.
 \item[overload] This option makes the standard multiple choice environments behave
 the same as the new environment counterparts, i.e.\@ the the standard multiple choice
 environments are overloaded (or redefined). This is useful if you wish to use an old
-exam and randomize the answers to the questions.
+exam and randomize the choices of the questions.
 
 \item[nooverload] This option suppresses the overloading of the standard multiple choice
 environments so you have to use the new multiple choice environments if you want to
-randomize the answers to the questions. Overloading is turned off by default.
+randomize the choices to the questions. Overloading is turned off by default.
 
 \item[\texttt{debug}] This option causes the package to emit a lot of debug messages.
 The messages are written to the log file by the \texttt{\bs{PackageWarning}}
@@ -722,12 +722,12 @@ If you load the package with no options, it behaves as:
 To get a consistent randomization, you must seed the pseudo random generator
 with the same seed every time you compile your document. You can set the
 seed using the \texttt{\bs setrandomizerseed} macro. The macro has a mandatory
-argument that is a integer between 0 and $2^{31}-1$, \TeX' largest integer.
-Internallu, the PGF macro \texttt{\bs pgfmathsetseed} is called, and it is
+argument that is a integer between 0 and $2^{31}-1$, \TeX's largest integer.
+Internally, the PGF macro \texttt{\bs pgfmathsetseed} is called, and it is
 flagged that you applied a seed. If you fail to do so, the seeding value is
 \texttt{\bs time}$\times$\texttt{\bs year} as stated by the PFG manual%
 \footnote{Version 3.0.1a, page 940.}. Some \LaTeX\ compilers keep track of
-time by an integer that holds the seconds since midnight. The integer is
+time by an integer that holds the seconds counted since midnight. The integer is
 incremented every time the time passes a minute boundary. So the scenario
 can be that you compile your document a couple of times with no apparent
 differences between runs. But if the time passes a minute boundary, the
@@ -743,11 +743,12 @@ Please note that only the environments \texttt{randomizechoices},
 \texttt{oneparchoices} (if overloaded) can have valid keys in the key table.
 The \texttt{*checkboxes} environments can't 
 have keys because of the typesetting regime used by the \texttt{exam}
-document class. The \texttt{*choices} environments are typeset as lists
-using \texttt{\bs item} which can be provided with a \texttt{\bs label}.
-The \texttt{*checkboxes} environment are typeset by skips et al\@. so 
-labeling them would lead to a reference of the current question (or part,
-or sub part or sub-sub part). Labeling the correct choices (with the
+document class. The \texttt{*choices} environments use an internal counter
+to keep track of the choice currently being typeset. Using this counter, a
+label can be provided with a \texttt{\bs label} command.
+The \texttt{*checkboxes} environment don't use an internal counter so 
+labelling them would lead to a reference to the current question (or part,
+or sub part or sub-sub part). Labelling the correct choices (with the
 \texttt{\bs CorrectChoice} command) is automatically handled by the
 package.
 
@@ -761,7 +762,7 @@ At the end of the exam, issue the commands:
 
 to print the key table. The \texttt{\bs ifprintansers} command is only true if the
 \texttt{exam} document class \texttt{ansers} option is set, thereby preventing
-accidental typesetting the key table. If an correct choice can't be labeled, the
+accidental typesetting the key table. If an correct choice can't be labelled, the
 table entry will contain \textbf{??}, otherwise it will contain the used typesetting scheme
 (which is \texttt{\bs Alph} by default).
 The key table is typeset using the \texttt{tabular}
@@ -773,8 +774,8 @@ The key table file can safely be deleted. It is generated each time the
 \texttt{\bs printkeytable} command is executed. Edits to the file are lost.
 
 An example of a key table is presented below. Note the \textbf{??} in the
-Answer column. This is the result of using the standard multiple choices
-environments (they are not overloaded).
+Answer column. This is the result of using the standard multiple choice
+environments (they are not overloaded, so no label is applied).
 
 \printkeytable
 
@@ -798,10 +799,11 @@ is presented below. In essence, the file contains a \texttt{\bs gdef} command
 that assigns the key list to the supplied command name (in this case
 \texttt{\bs mykeylist}).
 
+\writekeylist{\mykeylist}
 \lstinputlisting[caption=]{exam-randomchoices-doc.keylist}
+%\enlargethispage{2\baselineskip}
 
-%\vspace*{2.\baselineskip}
-\newpage
+\vspace*{2.\baselineskip}
 The key list itself is constructed as a comma-separated list. The question
 number and answer keys are separated with a `/'. This makes it easy to
 parse the list with PGF's \texttt{\bs foreach} command:
@@ -814,7 +816,7 @@ parse the list with PGF's \texttt{\bs foreach} command:
 }
 \end{lstlisting}
 
-results in:
+Executing this code results in:
 
 \input{\jobname.keylist}
 
@@ -828,16 +830,19 @@ should have one, and only one correct answer. The packages issues an
 error if a question has zero or more than one correct answer, but it
 doesn't stop compilation. If a question has no correct answer there
 will be a \textbf{??} in the printed key table and a ? in the key list
-file. If a question has two or more correct answers. The last correct
+file. If a question has two or more correct answers, the last correct
 answer being typeset will be printed in the key table and is written to
 the key list file.
 
+Also note that using the \textsl{parts} environment to typeset multiple
+multiple choice questions is not supported because of the automatic
+labelling mechanism (support is only at the question level).
 
 \section{Some internal details of the package}
-This section provided some internal details on the operation of the package.
+This section provides some internal details on the operation of the package.
 
-\subsection{Uses packages}
-The package loads the following packages
+\subsection{Used packages}
+The package loads the following packages:
 
 \begin{description}[labelindent=2ex]
 \item[\texttt{environ}] This package is used for defining the new environments. It provides
@@ -911,13 +916,13 @@ separator \texttt{\bs choice}.
       \texttt{\bs choice [@]} is replaced by \texttt{\bs CorrectChoice}.
 \end{enumerate}
 
-Of course this behaviour can be altered with options. For example, if the option
+Of course this behaviour can be altered by options. For example, if the option
 \texttt{norandomize} is passed, \texttt{\bs BODY} is simply copied to
 \texttt{\bs @typesetchoices}.
 
-Please note: We need to replace \texttt{\bs CorrectChoice} with \texttt{\bs choice [@]}
-because the list parser can only handle one list separator at a time. The construct
-\texttt{[@]} is likely not to be entered by the user but if the user enters \texttt{[@]}
+Please note: We need to replace \texttt{\bs CorrectChoice} with \texttt{\bs choice \bs inaccessible}
+because the list parser can only handle one list separator at a time. The very misunderstood command
+\texttt{\bs inaccessible}\footnote{This sequence of character sometimes appear in error messages generated by \LaTeX.} is likely not to be entered by the user but if the user enters \texttt{\bs inaccessible}
 directly after a \texttt{\bs choice} command, this is converted to \texttt{\bs CorrectChoice}
 in step 5. Of course this is not a bug, but a feature.
 
