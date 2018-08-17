@@ -1,10 +1,30 @@
+%%
+%% exam-randomizechoices.tex
+%%
+%% Randomize mc choices using the exam class -- examples
+%%
+%% (c)2018 Jesse op den Brouw, <J.E.J.opdenBrouw@hhs.nl>
+%%
+%% LPPL LaTeX Public Project License
+%%
+%% Permission is granted to copy, distribute and/or modify this
+%% software under the terms of the LaTeX Project Public License
+%% (LPPL), version 1.3c or any later version.
+%%
+%% This software is provided 'as is', without warranty of any kind,
+%% either expressed or implied, including, but not limited to, the
+%% implied warranties of merchantability and fitness for a
+%% particular purpose.
+%%
 \documentclass[a4paper,answers,addpoints]{exam}
 
 \usepackage{parskip}
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 %\usepackage{mathtools}
 
-\usepackage[norefcheckboxes,norandomize,nooverload]{exam-randomizechoices}
+\usepackage{tikz}
+\usepackage[debug,norefcheckboxes,randomize,overload,nokeeplast]{exam-randomizechoices}
+\usepackage[showframe]{geometry}
 
 %\setrandomizerseed{3}
 
@@ -13,9 +33,9 @@
 
 %\CorrectChoiceEmphasis{\color{red}\slshape}
 
-
-
-
+\makeatletter
+%\show\@@createrandomlist
+\makeatother
 
 \begin{document}
 
@@ -28,19 +48,19 @@ The total number of points to earn is \numpoints.
 
 \begin{questions}
 
-%%%%%%%1
-%%%\question[5]
-%%%One of these things is not like the others; one of these
-%%%things is not the same. Which one is different?
-%%%
-%%%\begin{randomizechoices}
-%%%\choice John
-%%%\choice Paul
-%%%\choice George
-%%%\choice Ringo
-%%%\CorrectChoice Socrates
-%%%\end{randomizechoices}
-%%%
+%%%%1
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizechoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizechoices}
+
 %%%%2
 %%%\question[5]
 %%%One of these things is not like the others; one of these
@@ -144,17 +164,17 @@ The total number of points to earn is \numpoints.
 %%%\end{randomizechoices}
 %%%
 %%%%%10
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-\begin{choices}
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{choices}
+%%%\question[5]
+%%%One of these things is not like the others; one of these
+%%%things is not the same. Which one is different?
+%%%
+%%%\begin{choices}
+%%%\choice John
+%%%\choice Paul
+%%%\choice George
+%%%\choice Ringo
+%%%\CorrectChoice Socrates
+%%%\end{choices}
 %%%
 %%%%%%%%11
 %%%\question[5]
@@ -170,17 +190,17 @@ things is not the same. Which one is different?
 %%%\end{randomizeoneparchoices}
 %%%
 %%%%%12
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-\begin{oneparchoices}
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{oneparchoices}
+%%%\question[5]
+%%%One of these things is not like the others; one of these
+%%%things is not the same. Which one is different?
+%%%
+%%%\begin{oneparchoices}
+%%%\choice John
+%%%\choice Paul
+%%%\choice George
+%%%\choice Ringo
+%%%\CorrectChoice Socrates
+%%%\end{oneparchoices}
 %%%
 %%%%%%%%13
 %%%\question[5]
@@ -397,17 +417,17 @@ things is not the same. Which one is different?
 %%%\end{randomizecheckboxes}
 %%%
 %%%%%27
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-\begin{checkboxes}
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{checkboxes}
+%%%\question[5]
+%%%One of these things is not like the others; one of these
+%%%things is not the same. Which one is different?
+%%%
+%%%\begin{checkboxes}
+%%%\choice John
+%%%\choice Paul
+%%%\choice George
+%%%\choice Ringo
+%%%\CorrectChoice Socrates
+%%%\end{checkboxes}
 %%%
 %%%%%%%%28
 %%%\question[5]
@@ -423,17 +443,17 @@ things is not the same. Which one is different?
 %%%\end{randomizeoneparcheckboxes}
 %%%
 %%%%%29
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-\begin{oneparcheckboxes}%[keeplast]
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{oneparcheckboxes}
+%%%\question[5]
+%%%One of these things is not like the others; one of these
+%%%things is not the same. Which one is different?
+%%%
+%%%\begin{oneparcheckboxes}%[keeplast]
+%%%\choice John
+%%%\choice Paul
+%%%\choice George
+%%%\choice Ringo
+%%%\CorrectChoice Socrates
+%%%\end{oneparcheckboxes}
 
 %%\question
 %%Proceed with the next sub-questions.
@@ -489,13 +509,13 @@ things is not the same. Which one is different?
 \end{questions}
 
 \hrulefill
-\bigskip
+%\bigskip
 
 %\gradetable[h]
 
 %\combinedgradetable[h]
 
-\bigskip
+%\bigskip
 
 %\label{question@\thequestion @correctchoicce}
 
@@ -505,12 +525,12 @@ things is not the same. Which one is different?
 
 
 Key table
-\printkeytable
+
+\printkeytable\unskip
 
 %\renewcommand\thecheckbox{\arabic{checkbox}}
 
 \writekeylist{\mykeylist}
-
 
 
 
