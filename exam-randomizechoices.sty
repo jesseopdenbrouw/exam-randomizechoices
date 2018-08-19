@@ -26,8 +26,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 %% Version and date
-\gdef\fileversion{0.1$\delta$}
-\gdef\filedate{2018/08/17}
+\gdef\fileversion{0.1$\epsilon$}
+\gdef\filedate{2018/08/19}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,6 +110,11 @@
 	\pgfmathsetseed{#1}
 	\global\@@seedsettrue
 }
+
+\newcommand{\keylistquestionname}[1]{\edef\erc@keylistquestionname{#1}}
+\keylistquestionname{Question}
+\newcommand{\keylistkeyname}[1]{\edef\erc@keylistkeyname{#1}}
+\keylistkeyname{Key}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                       %%
@@ -438,7 +443,7 @@
     %% Start the oneparchoices environment
     \begin{@oldoneparchoices}%
        % Execute the list
-       \@typesetchoicesT
+       \@typesetchoices
     \end{@oldoneparchoices}%
   }
 
@@ -593,7 +598,7 @@
   \immediate\write\tempfile{\@percentchar}%
   \immediate\write\tempfile{\string\begin{tabular} {|c|c|}}%
   \immediate\write\tempfile{\string\hline}%
-  \immediate\write\tempfile{Question & Answer \cr \string\hline}%
+  \immediate\write\tempfile{\erc@keylistquestionname & \erc@keylistkeyname \cr \string\hline}%
   %%
   %% Write the table entries.
   \ifnum\thequestion=0\relax
