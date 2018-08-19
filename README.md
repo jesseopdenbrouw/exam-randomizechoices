@@ -3,8 +3,7 @@
 
 #### LaTeX package for creating random placed choices in multiple choice environments using the ``exam`` document class. ####
 
-This package can be used with the [``exam``](https://ctan.org/pkg/exam) document class to typeset multiple choice questions with randomized typesetting of the possible choices. After loading this class, four new environments
-are available:
+This package can be used with the [``exam``](https://ctan.org/pkg/exam) document class to typeset multiple choice questions with randomized typesetting of the possible choices. After loading this class, four new environments are available:
 
 * ``randomizechoices`` -- the randomizing variant of ``choices``;
 * ``randomizeoneparchoices`` -- the randomizing variant of ``oneparchoices``;
@@ -31,3 +30,24 @@ Options can be:
 * ``nooverload`` -- This option suppresses the overloading of the standard multiple choice environments so you have to use the new multiple choice environments if you want to randomize the choices to the questions. Overloading is turned off by default.
 
 * ``debug`` -- This option causes the package to emit a lot of debug messages. Debug is turned off by default.
+
+An example of a randomizing choices environment is given below:
+
+
+    \question[5] What is the result of $1+1$?
+
+    \begin{randomizechoices}
+    \choice 1
+    \CorrectChoice 2
+    \choice 3
+    \choice 4
+    \end{randomizechoices}
+
+*possibly* (depends on de state of the pseudo random generator) typeset as:
+
+1. (5 points) What is the result of 1+1?
+
+   A. 2
+   B. 1
+   C. 4
+   D. 3
