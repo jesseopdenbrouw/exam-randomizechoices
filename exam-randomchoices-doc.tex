@@ -41,7 +41,6 @@
 
 \documentclass[12pt,a4paper]{exam}
 
-%\newcommand{\docversion}{0.1$\delta$}
 \newcommand{\styversion}{\fileversion}
 \newcommand{\stydate}{\filedate}
 %\newcommand{\docdate}{November 5, 2017}
@@ -737,7 +736,6 @@ next time you compile your document you'll see that the environment items
 have been rearranged.
 
 
-
 \subsection{Printing the key table}
 The package provides the typesetting of a basic key table in vertical direction.
 Please note that only the environments \texttt{randomizechoices},
@@ -781,6 +779,16 @@ environments (they are not overloaded, so no label is applied).
 
 \printkeytable
 
+The text in the table header row can be changed using two command: the command
+\texttt{\bs keylistquestionname} sets the text above the question numbers, which
+defaults to ``Question'', the command \texttt{\bs keylistkeyname} sets the text
+above the keys, which defaults to ``Key''. A typical use could be:
+
+\begin{lstlisting}
+\keylistquestionname{Exercise}
+\keylistkeyname{Answer Key}
+\end{lstlisting}
+
 \subsection{Writing the keys to a file}
 The package provides the writing of the keys to the file \texttt{\bs jobname.keylist},
 where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
@@ -803,9 +811,8 @@ that assigns the key list to the supplied command name (in this case
 
 \writekeylist{\mykeylist}
 \lstinputlisting[caption=]{exam-randomchoices-doc.keylist}
-%\enlargethispage{2\baselineskip}
 
-\vspace*{2.\baselineskip}
+\vspace*{1.5\baselineskip}
 The key list itself is constructed as a comma-separated list. The question
 number and answer keys are separated with a `/'. This makes it easy to
 parse the list with PGF's \texttt{\bs foreach} command:
@@ -840,8 +847,80 @@ Also note that using the \textsl{parts} environment to typeset multiple
 multiple choice questions is not supported because the automatic
 labelling mechanism supports only at the question level.
 
+\subsection{Verbatim environments}
+Verbatim environments such as \texttt{verbatim} and \texttt{lstlistings}
+are currently \emph{not} supported in the new and (overloaded) standard multiple
+choice environments. This is due to the way the contents of these environments
+are collected. The \texttt{\bs verb} command is also not supported by the package
+but \texttt{\bs lstinline} is. An example, translated to English from a Dutch exam
+on the ATmega32 microcontroller chip:
+
+\begin{lstlisting}
+\question[5]
+The individual pins of Port D can be configured as input or output.
+The single bits of Port D are called PD7, PD6, PD5, PD4, PD3, PD2,
+PD1 and PD0. Which of the following alternatives configures PD0, PD1,
+PD6 and PD7 as output and the remaining pins as input?
+
+\begin{randomizechoices}
+\choice \lstinline|out DDRD,0x3c|
+\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
+\choice \lstinline|out PORTD,0x3c|
+\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+\end{randomizechoices}
+\end{lstlisting}
+
+typesets possibly to:
+
+\begin{questions}
+\setlength{\parskip}{0pt}
+\setcounter{question}{8}
+\question[5]
+The individual pins of Port D can be configured as input or output. The single bits
+of Port D are called PD7, PD6, PD5, PD4, PD3, PD2, PD1 and PD0. Which of the
+following alternatives configures PD0, PD1, PD6 and PD7 as output and the remaining
+pins as input?
+
+%%Original Dutch text
+%%De individuele pinnen van Port D kunnen als ingang of uitgang geconfigureerd worden. De
+%%enkelvoudige bits van Port D worden PD7, PD6, PD5, PD4, PD3, PD2, PD1, PD0 genoemd.
+%%Welk van de volgende alternatieven configureert PD0, PD1, PD6 en PD7 als uitgang en de
+%%overige pinnen als ingang?
+
+\hspace*{\baselineskip}
+
+\begin{randomizechoices}[norandomize]
+	\choice \lstinline|out DDRD,0x3c|
+	\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
+    \choice \lstinline|out PORTD,0x3c|
+	\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+\end{randomizechoices}
+\end{questions}
+
+
+\subsection{Accessing the internal labels}
+Each \texttt{\bs question} command is accompanied with a label of the form
+\texttt{question@}$x$ as provided by the \texttt{exam} document class, where
+$x$ is the decimal number of the question. A \texttt{\bs CorrectChoice}
+command is provided with a label (by this package) of the of the form \texttt{question@}$x$%
+\texttt{@correctchoice} where $x$ is again the decimal number of the question.
+The user can access these label by using the \texttt{\bs ref} command as shown
+below:
+
+\begin{lstlisting}
+The question number is~\ref{question@9} and the correct answer
+is~\ref{question@9@correctchoice}.
+\end{lstlisting}
+
+which typesets to:
+
+The question number is~\ref{question@9} and the correct answer
+is~\ref{question@9@correctchoice}.
+
+There is no need to change the cat code of `@'.
+
 \subsection{Error messages}
-The package will throw you some error messages in case you something wrong. The
+The package will throw you some error messages in case something is wrong. The
 message below is printed only at start up.
 
 \begin{description}[labelindent=2ex]
@@ -1008,6 +1087,13 @@ an external file is far more easy then typesetting it directly from the package.
 why. Notably the use of \texttt{\bs begin}, \texttt{\bs foreach} and \texttt{\bs hline}
 is problematic.
 
+\subsection{Verbatim environments}
+Verbatim environments are currently not supported. This is due to the way \texttt{\bs NewEviron}
+collects its contents. A \texttt{\bs NewEnviron} is not really an environment at all, but a
+command. One solution is to write the contents to a file and the include the file. This is
+being investigated. See \url{https://tex.stackexchange.com/questions/51239/verbatim-in-environ-s-body}.
+
+Also the \texttt{\bs verb} command is not supported, but \texttt{\bs lstinline} is.
 
 \section{A personal note}
 I've been using the \texttt{exam} document class for five years now. What I like most
