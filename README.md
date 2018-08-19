@@ -1,10 +1,9 @@
 # The exam-randomizechoices package #
-- - - -
+----------
 
 #### LaTeX package for creating random placed choices in multiple choice environments using the ``exam`` document class. ####
 
-This package can be used with the ``exam`` document class to typeset multiple choice questions with
-randomized typesetting of the possible choices. After loading this class, four new environments
+This package can be used with the [``exam``](https://ctan.org/pkg/exam) document class to typeset multiple choice questions with randomized typesetting of the possible choices. After loading this class, four new environments
 are available:
 
 * ``randomizechoices`` -- the randomizing variant of ``choices``;
@@ -14,7 +13,7 @@ are available:
 
 The package is loaded as given below
 
-``\\usepackage[`` *options* ``]{exam-randomizechoices}``
+``\usepackage[``*options*``]{exam-randomizechoices}``
     
 Options can be:
 
