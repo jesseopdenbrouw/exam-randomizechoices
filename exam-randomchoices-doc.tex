@@ -242,8 +242,12 @@ you should read this as ``the \texttt{randomizechoices}, \texttt{randomizeonepar
 ``\texttt{choices}, \texttt{oneparchoices}, \texttt{randomizechoices} and \texttt{randomizeoneparchoices}''.
 
 \item If you encounter the term ``\texttt{*checkboxes}'', you should read this as
-``\texttt{checkboxes}, \texttt{oneparcheckboxes}, \texttt{randomizecheckboxes} and \texttt{randomizeoneparcheckboxes}''.
+``\texttt{checkboxes}, \texttt{oneparcheckboxes}, \texttt{randomizecheckboxes} and
+\texttt{randomizeoneparcheckboxes}''.
 
+\item If you encounter the term ``command'' in the context of a backslash followed
+by a series of characters, you can read this as ``macro''. The official \TeX-name
+is ``control sequence''.
 \end{itemize}
 
 
@@ -381,7 +385,7 @@ An example of a question with the \texttt{choices} environment is:
 \end{lstlisting}
 
 which is typeset as:
-
+\enlargethispage{\baselineskip}
 \begin{questions}
 \setcounter{question}{0}
 \question[5] What is the result of $1+1$?
@@ -718,6 +722,16 @@ If you load the package with no options, it behaves as:
 \end{lstlisting}
 
 
+\subsection{Overloading the standard multiple choice environments}
+The the package option \texttt{overload} is in effect, the standard multiple choice
+environments are overloaded (or redefined) by the new multiple choice environments,
+i.e. the standard multiple choice environment behave the same as their
+randomizing counterparts. This way the user can typeset old exams or when creating
+an exam from a repository of (old) questions. Please note that the overloaded
+multiple choice environments now accept arguments just as their randomizing
+counterparts do.
+
+
 \subsection{Seeding rhe pseudo random generator}
 \label{sec:seeding}
 To get a consistent randomization, you must seed the pseudo random generator
@@ -902,7 +916,7 @@ pins as input?
 Each \texttt{\bs question} command is accompanied with a label of the form
 \texttt{question@}$x$ as provided by the \texttt{exam} document class, where
 $x$ is the decimal number of the question. A \texttt{\bs CorrectChoice}
-command is provided with a label (by this package) of the of the form \texttt{question@}$x$%
+command is provided with a label (by this package) of the form \linebreak \texttt{question@}$x$%
 \texttt{@correctchoice} where $x$ is again the decimal number of the question.
 The user can access these label by using the \texttt{\bs ref} command as shown
 below:
@@ -1059,7 +1073,9 @@ of the \texttt{choices} environment is created using \texttt{\bs let}:
 \end{lstlisting}
 
 Using \texttt{\bs let} doesn't create problems, because the \texttt{choices} environment
-doesn't support options. See \url{https://tex.stackexchange.com/questions/116670/duplicating-environments}. (I hate long URL's). Next, the \texttt{\bs choices} environment is redefined:
+doesn't support options. See \url{https://tex.stackexchange.com/questions/116670/}.
+% \url{https://tex.stackexchange.com/questions/116670/duplicating-environments}. (I hate long URL's).
+Next, the \texttt{\bs choices} environment is redefined:
 
 \begin{lstlisting}
 %% Renew the choices environment
@@ -1083,7 +1099,8 @@ Note that now the \texttt{\bs choices} environment can handle the same options a
 The key table is typeset using an external file, called \texttt{\bs jobname.keytable},
 where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling. Using
 an external file is far more easy then typesetting it directly from the package. See
-\url{https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment}
+%\url{https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment}
+\url{https://tex.stackexchange.com/questions/367979/}
 why. Notably the use of \texttt{\bs begin}, \texttt{\bs foreach} and \texttt{\bs hline}
 is problematic.
 
@@ -1091,7 +1108,9 @@ is problematic.
 Verbatim environments are currently not supported. This is due to the way \texttt{\bs NewEviron}
 collects its contents. A \texttt{\bs NewEnviron} is not really an environment at all, but a
 command. One solution is to write the contents to a file and the include the file. This is
-being investigated. See \url{https://tex.stackexchange.com/questions/51239/verbatim-in-environ-s-body}.
+being investigated. See
+% \url{https://tex.stackexchange.com/questions/51239/verbatim-in-environ-s-body}.
+\url{https://tex.stackexchange.com/questions/51239/}.
 
 Also the \texttt{\bs verb} command is not supported, but \texttt{\bs lstinline} is.
 
