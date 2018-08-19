@@ -1,11 +1,11 @@
 # The exam-randomizechoices package #
 ----------
 
-#### LaTeX package for creating random placed choices in multiple choice environments using the ``exam`` document class. ####
+#### LaTeX package for creating random placed choices in multiple choice environments using the [``exam``](https://ctan.org/pkg/exam) document class. ####
 
 *** Note: this package is unstable and ongoing development continues. ***
 
-This package can be used with the [``exam``](https://ctan.org/pkg/exam) document class to typeset multiple choice questions with randomized typesetting of the possible choices. After loading this class, four new environments are available:
+This package can be used with the [``exam``](https://ctan.org/pkg/exam) document class to typeset multiple choice questions with randomized typesetting of the possible choices. After loading this package, four new environments are available:
 
 * ``randomizechoices`` -- the randomizing variant of ``choices``;
 * ``randomizeoneparchoices`` -- the randomizing variant of ``oneparchoices``;
@@ -25,7 +25,7 @@ Options can be:
 
 * ``keeplast`` This option globally turns on the preservation of the last entered item in the new environments.
 
-* ``nokeeplast -- This option globally turns off the preservation of the last entered item in the new environments. This is the default behaviour.
+* ``nokeeplast`` -- This option globally turns off the preservation of the last entered item in the new environments. This is the default behaviour.
 
 * ``overload`` -- This option makes the standard multiple choice environments behave the same as the new environment counterparts, i.e. the the standard multiple choice environments are overloaded (or redefined). This is useful if you wish to use an old exam and randomize the choices of the questions.
 
