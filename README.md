@@ -45,9 +45,12 @@ An example of a randomizing choices environment is given below:
 
 *possibly* (depends on de state of the pseudo random generator) typeset as:
 
-1. (5 points) What is the result of 1+1?
+1\. (5 points) What is the result of 1+1?
 
    A. 2
+   
    B. 1
+   
    C. 4
    D. 3
+   
