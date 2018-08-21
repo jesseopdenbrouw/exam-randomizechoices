@@ -57,7 +57,7 @@ which *possibly* (depends on de state of the pseudo random generator) typesets a
  
    D. 3
    
-*** Note: verbatim environments such as [``verbatim``](https://ctan.org/pkg/ehttps://ctan.org/pkg/verbatim) and [``listings``](https://ctan.org/pkg/listings) are *not* supported!
+*** Note: verbatim environments such as [``verbatim``](https://ctan.org/pkg/verbatim) and [``listings``](https://ctan.org/pkg/listings) are *not* supported!
    
 
 See the documentation for full explanation of the package.
