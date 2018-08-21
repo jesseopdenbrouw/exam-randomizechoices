@@ -45,7 +45,7 @@ An example of a randomizing choices environment is given below:
     \choice 4
     \end{randomizechoices}
 
-*possibly* (depends on de state of the pseudo random generator) typesets as:
+which *possibly* (depends on de state of the pseudo random generator) typesets as:
 
 1\. (5 points) What is the result of 1+1?
 
@@ -57,4 +57,7 @@ An example of a randomizing choices environment is given below:
  
    D. 3
    
+*** Note: verbatim environments such as [``verbatim``](https://ctan.org/pkg/ehttps://ctan.org/pkg/verbatim) and [``listings``](https://ctan.org/pkg/listings) are *not* supported!
+   
+
 See the documentation for full explanation of the package.
