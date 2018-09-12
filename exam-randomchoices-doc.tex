@@ -34,7 +34,7 @@
 %% J.E.J.opdenBrouw@hhs.nl
 
 %% The newest version of this documentclass should always be available
-%% from BitBucket: https://bitbucket.org/hhse/exam-randomizechoices/src/master/
+%% from BitBucket: https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/src/master/
 
 %--------------------------------------------------------------------
 %--------------------------------------------------------------------
@@ -128,7 +128,7 @@
 \usepackage[]{exam-randomizechoices}
 
 %% Set seed
-\setrandomizerseed{-1}
+\setrandomizerseed{1}
 
 % In case we're not using hyperref.sty:
 \providecommand{\texorpdfstring}[2]{#1}
@@ -749,7 +749,6 @@ differences between runs. But if the time passes a minute boundary, the
 next time you compile your document you'll see that the environment items
 have been rearranged.
 
-
 \subsection{Printing the key table}
 The package provides the typesetting of a basic key table in vertical direction.
 Please note that only the environments \texttt{randomizechoices},
@@ -760,7 +759,7 @@ have keys because of the typesetting regime used by the \texttt{exam}
 document class. The \texttt{*choices} environments use an internal counter
 to keep track of the choice currently being typeset. Using this counter, a
 label can be provided with a \texttt{\bs label} command.
-The \texttt{*checkboxes} environment don't use an internal counter so 
+The \texttt{*checkboxes} environments don't use an internal counter so 
 labelling them would lead to a reference to the current question (or part,
 or sub part or sub-sub part). Labelling the correct choices (with the
 \texttt{\bs CorrectChoice} command) is automatically handled by the
@@ -782,11 +781,6 @@ table entry will contain \textbf{??}, otherwise it will contain the used typeset
 The key table is typeset using the \texttt{tabular}
 environment, so it can be wrapped in a \texttt{table} environment.
 
-The key table is typeset using an external file, called \texttt{\bs jobname.keytable},
-where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
-The key table file can safely be deleted. It is generated each time the
-\texttt{\bs printkeytable} command is executed. Edits to the file are lost.
-
 An example of a key table is presented below. Note the \textbf{??} in the
 Answer column. This is the result of using the standard multiple choice
 environments (they are not overloaded, so no label is applied).
@@ -804,10 +798,7 @@ above the keys, which defaults to ``Key''. A typical use could be:
 \end{lstlisting}
 
 \subsection{Writing the keys to a file}
-The package provides the writing of the keys to the file \texttt{\bs jobname.keylist},
-where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
-The key list file can safely be deleted. It is generated each time the
-\texttt{\bs writekeylist} command is executed. Edits to the file are lost.
+The package provides the writing of the keys to the file.
 Please note that only the environments \texttt{randomizechoices},
 \texttt{randomizeoneparchoices}, \texttt{choices} (if overloaded) and
 \texttt{oneparchoices} (if overloaded) can have valid keys in the key list.
@@ -815,10 +806,13 @@ Please note that only the environments \texttt{randomizechoices},
 Writing a key list file is started by the command:
 
 \begin{lstlisting}
-\writekeylist{(*\textsl{\textrm{command name}}*)}
+\writekeylist[(*\textsl{\textrm{filename}}*)]{(*\textsl{\textrm{command name}}*)}
 \end{lstlisting}
 
-The command name is used in the key list file. An example of a key list file
+The optional parameter \emph{filename} is the name of the file. If you don't
+provide a filename, \texttt{\bs jobname.keylist} will be used,
+where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling.
+The \emph{command name} is used in the key list file. An example of a key list file
 is presented below. In essence, the file contains a \texttt{\bs gdef} command
 that assigns the key list to the supplied command name (in this case
 \texttt{\bs mykeylist}).
@@ -846,6 +840,9 @@ Executing this code results in:
 \foreach \num/\key in \mykeylist {
 	\textcolor{red!\num0!blue} {question \num\ has key \key} \\
 }
+
+The key list file can safely be deleted. It is generated each time the
+\texttt{\bs writekeylist} command is executed. Edits to the file are lost.
 
 \subsection{There should be only one correct answer}
 As stated in the title of this section, each multiple choice question
@@ -911,7 +908,6 @@ pins as input?
 \end{randomizechoices}
 \end{questions}
 
-
 \subsection{Accessing the internal labels}
 Each \texttt{\bs question} command is accompanied with a label of the form
 \texttt{question@}$x$ as provided by the \texttt{exam} document class, where
@@ -968,6 +964,8 @@ does continue.
 or \texttt{\bs correctchoice}. Analogue to the famous missing \texttt{\bs item} messages.
  Compilation does continue.
  
+\item[\texttt{Cannot write key list file}] --- Writing of files is disabled so the key list file can't be generated.
+ 
 \end{description}
 
 
@@ -998,12 +996,12 @@ We define this environment as follows (not overloaded):
 \NewEnviron{randomizechoices}[1][]{
   %%
   %% Create a random list
-  \@@createrandomlist[#1]%
+  \erc@createrandomlist[#1]%
   %%
   %% Start the choices environment
   \begin{choices}%
     % Execute the list
-    \@typesetchoices%
+    \erc@typesetchoices%
   \end{choices}%
 }
 \end{lstlisting}
@@ -1035,7 +1033,7 @@ Using the command as in:
 simply expands and executes the command. Now all the \texttt{randomize*} environments
 are defined this way, so we need a generic command that parses \texttt{\bs BODY} and
 provides a command that contains the randomized version of \texttt{\bs BODY}. This is
-handled by the command \texttt{\bs @@createrandomlist}. What \texttt{\bs @@createrandomlist}
+handled by the command \texttt{\bs erc@createrandomlist}. What \texttt{\bs erc@createrandomlist}
 basically does is:
 
 \begin{enumerate}
@@ -1045,7 +1043,7 @@ basically does is:
 \item Disassembles \texttt{\bs BODY} into a set of commands by splitting on the list
       separator \texttt{\bs choice}. \texttt{\bs choice} is removed.
 \item Randomizes the order of the set of commands.
-\item Assembles the set of commands to the new command \texttt{\bs @typesetchoices},
+\item Assembles the set of commands to the new command \texttt{\bs erc@typesetchoices},
       thereby appending a \texttt{\bs label} to the correct choice. The construct
       \texttt{\bs choice \bs inaccessible} is replaced by \texttt{\bs CorrectChoice}.
 \end{enumerate}
@@ -1056,11 +1054,12 @@ takes place.
 
 Please note: We need to replace \texttt{\bs CorrectChoice} with \texttt{\bs choice \bs inaccessible}
 because the list parser can only handle one list separator at a time. The very misunderstood command
-\texttt{\bs inaccessible}\footnote{This sequence of character sometimes appear in error messages generated by \LaTeX.} is likely not to be entered by the user but if the user enters \texttt{\bs inaccessible}
+\texttt{\bs inaccessible}\footnote{This sequence of character sometimes appear in error messages
+generated by \LaTeX.} is likely not to be entered by the user but if the user enters \texttt{\bs inaccessible}
 directly after a \texttt{\bs choice} command, this is converted to \texttt{\bs CorrectChoice}
 in step 5. Of course this is not a bug, but a feature.
 
-After \texttt{\bs @@createrandomlist} has done it's job, the command \texttt{\bs @typesetchoices}
+After \texttt{\bs erc@createrandomlist} has done it's job, the command \texttt{\bs erc@typesetchoices}
 is simply expanded and executed within a \texttt{choices} environment.
 
 Now if the global \texttt{overload} option is in effect, some more trickery is needed. First, a copy
@@ -1074,7 +1073,6 @@ of the \texttt{choices} environment is created using \texttt{\bs let}:
 
 Using \texttt{\bs let} doesn't create problems, because the \texttt{choices} environment
 doesn't support options. See \url{https://tex.stackexchange.com/questions/116670/}.
-% \url{https://tex.stackexchange.com/questions/116670/duplicating-environments}. (I hate long URL's).
 Next, the \texttt{\bs choices} environment is redefined:
 
 \begin{lstlisting}
@@ -1082,12 +1080,12 @@ Next, the \texttt{\bs choices} environment is redefined:
 \RenewEnviron{choices}[1][]{
 
   %% Create a random list
-  \@@createrandomlist[#1]
+  \erc@createrandomlist[#1]
 
   %% Start the choices environment
   \begin{@oldchoices}
      % Execute the list
-     \@typesetchoices
+     \erc@typesetchoices
   \end{@oldchoices}
 }
 \end{lstlisting}
@@ -1095,12 +1093,10 @@ Next, the \texttt{\bs choices} environment is redefined:
 Note that now the \texttt{\bs choices} environment can handle the same options as the
 \texttt{randomizechoices} environment.
 
-\subsection{Note on the external key table file}
-The key table is typeset using an external file, called \texttt{\bs jobname.keytable},
-where \texttt{\bs jobname} is the name of your \LaTeX{} file you are compiling. Using
-an external file is far more easy then typesetting it directly from the package. See
-%\url{https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment}
-\url{https://tex.stackexchange.com/questions/367979/}
+\subsection{Note on the key table}
+The code of the key table is first collected using a series of \texttt{\bs gappto} and
+\texttt{\bs xappto} commands. Using these commands is far more easy then typesetting it
+directly from the package. See \url{https://tex.stackexchange.com/questions/367979/}
 why. Notably the use of \texttt{\bs begin}, \texttt{\bs foreach} and \texttt{\bs hline}
 is problematic.
 
