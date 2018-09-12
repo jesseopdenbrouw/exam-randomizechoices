@@ -22,7 +22,6 @@
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 %\usepackage{mathtools}
 
-\usepackage{tikz}
 \usepackage[debug,norefcheckboxes,randomize,overload,nokeeplast]{exam-randomizechoices}
 \usepackage[showframe]{geometry}
 
@@ -31,11 +30,7 @@
 %%\checkboxchar{\thecheckbox}
 %%\checkedchar{\thecheckbox}
 
-%\CorrectChoiceEmphasis{\color{red}\slshape}
-
-\makeatletter
-%\show\@@createrandomlist
-\makeatother
+\CorrectChoiceEmphasis{\color{red}\slshape}
 
 \begin{document}
 
@@ -47,6 +42,9 @@ The total number of points to earn is \numpoints.
 
 
 \begin{questions}
+
+
+
 
 %%%%1
 \question[5]
@@ -62,43 +60,43 @@ things is not the same. Which one is different?
 \end{randomizechoices}
 
 %%%%2
-%%%\question[5]
-%%%One of these things is not like the others; one of these
-%%%things is not the same. Which one is different?
-%%%
-%%%\begin{randomizeoneparchoices}
-%%%\choice John
-%%%\choice Paul
-%%%\choice George
-%%%\choice Ringo
-%%%\CorrectChoice Socrates
-%%%\end{randomizeoneparchoices}
-%%%
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+
 %%%%%%%%3
-%%%\question[5]
-%%%One of these things is not like the others; one of these
-%%%things is not the same. Which one is different?
-%%%
-%%%\begin{randomizecheckboxes}
-%%%\choice John
-%%%\choice Paul
-%%%\choice George
-%%%\choice Ringo
-%%%\CorrectChoice Socrates
-%%%\end{randomizecheckboxes}
-%%%
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizecheckboxes}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizecheckboxes}
+
 %%%%%%%%4
-%%%\question[5]
-%%%One of these things is not like the others; one of these
-%%%things is not the same. Which one is different?
-%%%
-%%%\begin{randomizeoneparcheckboxes}
-%%%\choice John
-%%%\choice Paul
-%%%\choice George
-%%%\choice Ringo
-%%%\CorrectChoice Socrates
-%%%\end{randomizeoneparcheckboxes}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparcheckboxes}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparcheckboxes}
 
 %%%%%%%%5
 %%%\question[5]
@@ -512,24 +510,16 @@ things is not the same. Which one is different?
 %\bigskip
 
 %\gradetable[h]
-
+%
 %\combinedgradetable[h]
-
-%\bigskip
-
-%\label{question@\thequestion @correctchoicce}
-
-%%Dumping key table.
-%%
-%%Number of questions found: \thequestion.
-
 
 Key table
 
-\printkeytable\unskip
+\printkeytable
 
 %\renewcommand\thecheckbox{\arabic{checkbox}}
 
+\writekeylist[testfile.txt]{\mykeylist}
 \writekeylist{\mykeylist}
 
 
