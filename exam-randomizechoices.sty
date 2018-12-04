@@ -26,13 +26,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 %% Version and date
-\gdef\fileversion{0.1$\zeta$}
-\gdef\filedate{2018/09/01}
+\gdef\fileversion{0.1$\eta$}
+\gdef\filedate{2018/12/04}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%% Sign up to (La)TeX
+%% Sign up to LaTeX
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ProvidesPackage{exam-randomizechoices}[\filedate\space V\fileversion\space
@@ -130,15 +130,15 @@
 %% oneparscheckboxes environments when using \ref et al. %%
 %%                                                       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\gdef\erc@passnolabel{@nolabel}
 \iferc@@refcheckboxes
+  \gdef\erc@passnolabel{}
   \newcounter{checkbox}
   \renewcommand\thecheckbox{\ordinal{checkbox}}
-  %\renewcommand\thecheckbox{\Alph{checkbox}}
   \newcommand\checkboxlabel{\thecheckbox.}
-  \def\erc@textsuperscript#1{$^\text{#1}$}
-
-  %\show\thecheckbox
-  %\show\@oldoneparcheckboxes
+%  \def\erc@textsuperscript#1{$^\text{#1}$}
+%  \def\erc@textsuperscript#1{\raisebox{0.5ex}{\footnotesize #1}}
+  \def\erc@textsuperscript#1{#1}
 
   \def\ordinal#1{\expandafter\lc@ordinal\csname c@#1\endcsname}
   \def\lc@ordinal#1{%
@@ -162,29 +162,21 @@
   %% Start patching the standard *checkboxes environment
 
   \setcounter{erc@counter}{0}
-  %% Counter for counting the number of correct choices
-  \def\@incr{\stepcounter{erc@counter}}
-  \patchcmd{\oneparcheckboxes}{\setcounter{choice}}{\setcounter{checkbox}}{\@incr}{}
+  %% Counting the number of correct applied patches
+  \def\erc@incr{\stepcounter{erc@counter}}
+  \patchcmd{\oneparcheckboxes}{\setcounter{choice}}{\setcounter{checkbox}}{\erc@incr}{}
 
-  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
-  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
-  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
-  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
-%  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\erc@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\erc@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\erc@incr}{}
+  \patchcmd{\oneparcheckboxes}{{choice}}{{checkbox}}{\erc@incr}{}
 
-    \PackageWarning{test}{Applied \theerc@counter\space patches}
+  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\erc@incr}{}
+  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\erc@incr}{}
 
+  \patchcmd{\checkboxes}{\settowidth }{\usecounter {checkbox}\def\makelabel##1{\hss\llap{##1}} \settowidth }{\erc@incr}{}
+  \patchcmd{\checkboxes}{\item [\checked@char ]}{\refstepcounter {checkbox} \item [\checked@char ]}{\erc@incr}{}
 
-  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
-  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
-%  \patchcmd{\oneparcheckboxes}{\stepcounter}{\refstepcounter}{\@incr}{}
-
-    \PackageWarning{test}{Applied \theerc@counter\space patches}
-
-%  \show\checkboxes
-  \patchcmd{\checkboxes}{\settowidth }{\usecounter {checkbox}\def\makelabel##1{\hss\llap{##1}} \settowidth }{\@incr}{}
-  \patchcmd{\checkboxes}{\item [\checked@char ]}{\refstepcounter {checkbox} \item [\checked@char ]}{\@incr}{}
-%  \show\checkboxes
   %% End patching the standard *checkboxes environment
 
   \ifnum \theerc@counter=9
@@ -214,7 +206,7 @@
 \newcounter{erc@nrcorrectchoices}
 
 \newif\iferc@keeplast
-\newif\if@@ercrandom
+\newif\iferc@random
 \newif\iferc@nolabel
 \newcommand{\erc@createrandomlist}[1][]{%
   %%
@@ -224,7 +216,7 @@
   %%
   %% Copy the global package options
   \if@@ercgkeeplast\erc@keeplasttrue\else\erc@keeplastfalse\fi
-  \if@@ercgrandom\@@ercrandomtrue\else\@@ercrandomfalse\fi
+  \if@@ercgrandom\erc@randomtrue\else\erc@randomfalse\fi
   %%
   %% Check if label can be used
   \erc@nolabelfalse
@@ -242,12 +234,12 @@
   %% Parse options to question
   \foreach \erc@option in {#1} {%
     \if@@ercdebug
-      \PackageWarning{exam-randomizechoices}{I found option: \erc@option}%
+      \PackageWarning{exam-randomizechoices}{I found option: "\erc@option"}%
     \fi
     \ifdefstring{\erc@option}{keeplast}{\global\erc@keeplasttrue}{}%
     \ifdefstring{\erc@option}{nokeeplast}{\global\erc@keeplastfalse}{}%
-    \ifdefstring{\erc@option}{randomize}{\global\@@ercrandomtrue}{}%
-    \ifdefstring{\erc@option}{norandomize}{\global\@@ercrandomfalse}{}%
+    \ifdefstring{\erc@option}{randomize}{\global\erc@randomtrue}{}%
+    \ifdefstring{\erc@option}{norandomize}{\global\erc@randomfalse}{}%
     \ifdefstring{\erc@option}{@nolabel}{\global\erc@nolabeltrue}{}%
   }%
   %%
@@ -256,7 +248,7 @@
   %% Counter for counting the number of correct choices
   \setcounter{erc@nrcorrectchoices}{0}%
   %% Useful \def
-  \def\@incr{\stepcounter{erc@nrcorrectchoices}}%
+  \def\erc@incr{\stepcounter{erc@nrcorrectchoices}}%
   %%
   %% Patch \BODY, \correctchoice and \CorrectChoice are replaced by \choice \inaccessible
   %% We need to do this for the following step, which is splitting the list
@@ -265,11 +257,11 @@
   \newbool{erc@stillpatching}%
   \booltrue{erc@stillpatching}%
   \whileboolexpr{ test {\ifbool{erc@stillpatching}}}{%
-    \patchcmd{\BODY}{\CorrectChoice}{\choice \inaccessible }{\@incr}{\boolfalse{erc@stillpatching}}%
+    \patchcmd{\BODY}{\CorrectChoice}{\choice \inaccessible }{\erc@incr}{\boolfalse{erc@stillpatching}}%
   }%
   \booltrue{erc@stillpatching}%
   \whileboolexpr{ test {\ifbool{erc@stillpatching}}}{%
-    \patchcmd{\BODY}{\correctchoice}{\choice \inaccessible }{\@incr}{\boolfalse{erc@stillpatching}}%
+    \patchcmd{\BODY}{\correctchoice}{\choice \inaccessible }{\erc@incr}{\boolfalse{erc@stillpatching}}%
   }%
   %%
   %% We need exactly one \CorrectChoice, so throw an error if not.
@@ -310,7 +302,7 @@
   }%
   %%
   %% If randomize question...
-  \if@@ercrandom
+  \iferc@random
     %% If we should randomize...
     \if@@ercdebug
       \PackageWarning{exam-randomizechoices}{Randomizing...}%
@@ -320,6 +312,7 @@
     %% We do this on the \erc@answerTempnum<number> macros because it's
     %% a pain to do it on the choices itself
     \numdef\@numberofswaps{\theerc@counter-1}%
+%    \PackageWarning{test}{++> \@numberofswaps\space \theerc@counter}%
     %%
     %% User didn't set the seed	
 	\iferc@seedset
@@ -327,7 +320,7 @@
 	  \PackageWarning{exam-randomizechoices}{You didn't set the randomizer seed}%
 	\fi
     %%
-    %% Randomize the choice number list  
+    %% Randomize the choice number list 
     \foreach \x in {1,...,\@numberofswaps} {%
       \iferc@keeplast
         \pgfmathrandominteger{\r}{\x}{\@numberofswaps}%
@@ -497,7 +490,7 @@
   \RenewEnviron{checkboxes}[1][]{
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the choices environment
     \begin{@oldcheckboxes}%
@@ -509,7 +502,7 @@
   \NewEnviron{randomizecheckboxes}[1][]{%
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the choices environment
     \begin{@oldcheckboxes}%
@@ -521,7 +514,7 @@
   \NewEnviron{randomizecheckboxes}[1][]{
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the oneparchoices environment
     \begin{checkboxes}%
@@ -547,7 +540,7 @@
   \RenewEnviron{oneparcheckboxes}[1][]{
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the oneparcheckboxes environment
     \begin{@oldoneparcheckboxes}%
@@ -559,7 +552,7 @@
   \NewEnviron{randomizeoneparcheckboxes}[1][]{%
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the oneparcheckboxes environment
     \begin{@oldoneparcheckboxes}%
@@ -571,7 +564,7 @@
   \NewEnviron{randomizeoneparcheckboxes}[1][]{%
     %%
     %% Create a random list
-    \erc@createrandomlist[#1,@nolabel]%
+    \erc@createrandomlist[#1,\erc@passnolabel]%
     %%
     %% Start the onrparcheckboxes environment
     \begin{oneparcheckboxes}%
