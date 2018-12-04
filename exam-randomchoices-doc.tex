@@ -66,15 +66,11 @@
 %% Nice tables
 \usepackage{tabu}
 
-%% Mathematical thniks
-\usepackage{mathtools}
-
 %% Colors
 \usepackage[x11names]{xcolor}
 
 %% Use the Charter font + math symbols
 \usepackage[scaled=0.9]{nimbusmono}
-\usepackage{charter}
 \usepackage[bitstream-charter]{mathdesign}
 %% Use microtype
 \usepackage[stretch=10]{microtype}
@@ -100,8 +96,8 @@
   breakatwhitespace=true,
   title=\lstname,
   upquote=true,
-  aboveskip=\baselineskip,
-  belowskip=-\baselineskip,
+  aboveskip=0.3\baselineskip,
+  belowskip=-.5\baselineskip,
   escapeinside={(*}{*)}
 }
 
@@ -125,7 +121,7 @@
 \usepackage{parskip}
 
 %% The randomization package
-\usepackage[]{exam-randomizechoices}
+\usepackage[randomize,nokeeplast,norefcheckboxes]{exam-randomizechoices}
 
 %% Set seed
 \setrandomizerseed{1}
@@ -143,6 +139,7 @@
 %---------------------------------------------------------------------
 
 \begin{document}
+\raggedbottom
 
 \cfoot[]{Page \thepage\ of \numpages}
 
@@ -224,7 +221,7 @@ to the author.
 
 Please use a recent version of the \texttt{exam} document class. This
 package is tested with version 2.603 which is available in most distributions.
-Testing with version 2.604\$beta \$ is planned.
+Testing with version 2.605\$\bs beta\$ is planned.
 
 \subsection{A word about reading this document}
 This document uses terminology which is described below:
@@ -427,7 +424,7 @@ which is typeset as:
 \end{oneparchoices}
 \end{questions}
 
-Furthermore, the \texttt{exam} document class provides for two way of typesetting
+Furthermore, the \texttt{exam} document class provides two ways of typesetting
 checkbox questions.
 
 \subsection{The \texttt{checkboxes} environment}
@@ -723,7 +720,7 @@ If you load the package with no options, it behaves as:
 
 
 \subsection{Overloading the standard multiple choice environments}
-The the package option \texttt{overload} is in effect, the standard multiple choice
+If the package option \texttt{overload} is in effect, the standard multiple choice
 environments are overloaded (or redefined) by the new multiple choice environments,
 i.e. the standard multiple choice environment behave the same as their
 randomizing counterparts. This way the user can typeset old exams or when creating
@@ -737,7 +734,7 @@ counterparts do.
 To get a consistent randomization, you must seed the pseudo random generator
 with the same seed every time you compile your document. You can set the
 seed using the \texttt{\bs setrandomizerseed} macro. The macro has a mandatory
-argument that is a integer between 0 and $2^{31}-1$, \TeX's largest integer.
+argument that is an integer between 0 and $2^{31}-1$, \TeX's largest integer.
 Internally, the PGF macro \texttt{\bs pgfmathsetseed} is called, and it is
 flagged that you applied a seed. If you fail to do so, the seeding value is
 \texttt{\bs time}$\times$\texttt{\bs year} as stated by the PFG manual%
@@ -818,6 +815,7 @@ that assigns the key list to the supplied command name (in this case
 \texttt{\bs mykeylist}).
 
 \writekeylist{\mykeylist}
+\vspace*{\baselineskip}
 \lstinputlisting[caption=]{exam-randomchoices-doc.keylist}
 
 \vspace*{1.5\baselineskip}
@@ -897,8 +895,8 @@ pins as input?
 %%enkelvoudige bits van Port D worden PD7, PD6, PD5, PD4, PD3, PD2, PD1, PD0 genoemd.
 %%Welk van de volgende alternatieven configureert PD0, PD1, PD6 en PD7 als uitgang en de
 %%overige pinnen als ingang?
-
-\hspace*{\baselineskip}
+%
+%\hspace*{\baselineskip}
 
 \begin{randomizechoices}[norandomize]
 	\choice \lstinline|out DDRD,0x3c|
@@ -914,7 +912,7 @@ Each \texttt{\bs question} command is accompanied with a label of the form
 $x$ is the decimal number of the question. A \texttt{\bs CorrectChoice}
 command is provided with a label (by this package) of the form \linebreak \texttt{question@}$x$%
 \texttt{@correctchoice} where $x$ is again the decimal number of the question.
-The user can access these label by using the \texttt{\bs ref} command as shown
+The user can access these labels by using the \texttt{\bs ref} command as shown
 below:
 
 \begin{lstlisting}
@@ -960,7 +958,7 @@ answer in a multiple choice question. Compilation does continue.
 provide two or more choices, so there's nothing to choose from. Compilation
 does continue.     
 
-\item[\texttt{Something's wrong, perhaps a missing \string\choice\ or \string\CorrectChoice\ or ...}] --- You used text before an \texttt{\bs choice}, \texttt{\bs CorrectChoice}
+\item[\texttt{Something's wrong, perhaps a missing \string\choice\ or \string\CorrectChoice\ or ...}] --- You used text before an initial \texttt{\bs choice}, \texttt{\bs CorrectChoice}
 or \texttt{\bs correctchoice}. Analogue to the famous missing \texttt{\bs item} messages.
  Compilation does continue.
  
@@ -1026,11 +1024,12 @@ the \texttt{\bs BODY} command now contains (comments and newlines are stripped):
 \end{lstlisting}
 
 Using the command as in:
+
 \begin{lstlisting}
 \BODY
 \end{lstlisting}
 
-simply expands and executes the command. Now all the \texttt{randomize*} environments
+simply expands the command. Now all the \texttt{randomize*} environments
 are defined this way, so we need a generic command that parses \texttt{\bs BODY} and
 provides a command that contains the randomized version of \texttt{\bs BODY}. This is
 handled by the command \texttt{\bs erc@createrandomlist}. What \texttt{\bs erc@createrandomlist}
@@ -1060,7 +1059,7 @@ directly after a \texttt{\bs choice} command, this is converted to \texttt{\bs C
 in step 5. Of course this is not a bug, but a feature.
 
 After \texttt{\bs erc@createrandomlist} has done it's job, the command \texttt{\bs erc@typesetchoices}
-is simply expanded and executed within a \texttt{choices} environment.
+is simply expanded within a \texttt{choices} environment.
 
 Now if the global \texttt{overload} option is in effect, some more trickery is needed. First, a copy
 of the \texttt{choices} environment is created using \texttt{\bs let}:
