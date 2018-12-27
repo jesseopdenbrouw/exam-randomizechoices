@@ -16,14 +16,14 @@
 %% implied warranties of merchantability and fitness for a
 %% particular purpose.
 %%
-\documentclass[a4paper,answers,addpoints]{exam}
+\documentclass[answers,addpoints]{exam}
 
 \usepackage{parskip}
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 \usepackage{mathtools}
 
-\usepackage[debug,refcheckboxes,randomize,nokeeplast]{exam-randomizechoices}
-\usepackage[showframe]{geometry}
+\usepackage[debug,randomize,nokeeplast,norefcheckboxes]{exam-randomizechoices}
+\usepackage[a4paper]{geometry}
 
 \setrandomizerseed{999}
 
@@ -72,7 +72,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{randomizeoneparchoices}
 
-%%%%%%%%3
+%%%%%3
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -507,17 +507,10 @@ things is not the same. Which one is different?
 \end{questions}
 
 \hrulefill
-%\bigskip
-
-%\gradetable[h]
-%
-%\combinedgradetable[h]
 
 Key table
 
 \printkeytable
-
-%\renewcommand\thecheckbox{\arabic{checkbox}}
 
 \writekeylist[testfile.txt]{\mykeylist}
 \writekeylist{\mykeylist}
