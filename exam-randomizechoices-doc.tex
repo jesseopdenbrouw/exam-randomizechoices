@@ -1,3 +1,7 @@
+% !TeX encoding = UTF-8
+% !TeX TS-program = pdflatex
+% !TeX spellcheck = en_GB
+
 %%--------------------------------------------------------------------
 %%--------------------------------------------------------------------
 %% exam-randomizechoices-doc.tex
@@ -43,7 +47,7 @@
 
 \newcommand{\styversion}{\fileversion}
 \newcommand{\stydate}{\filedate}
-\newcommand{\docdate}{January 9, 2019}
+\newcommand{\docdate}{June 22, 2019}
 %\newcommand{\docdate}{Draft: \today}
 
 \usepackage{mathtools}
@@ -55,7 +59,7 @@
 \usepackage[T1]{fontenc}
 
 %% Set page layout
-\usepackage[a4paper,left=1.0in,right=1.0in,top=1.0in,bottom=1.4in,footskip=0.5in]{geometry}
+\usepackage[a4paper,left=1.0in,right=1.0in,top=1.0in,bottom=1.31in,footskip=0.4in]{geometry}
 
 %% Use package enumitem
 \usepackage{enumitem}
@@ -96,9 +100,9 @@
   breakatwhitespace=true,
   title=\lstname,
   upquote=true,
-  aboveskip=0.3\baselineskip,
-  belowskip=-.5\baselineskip,
-  escapeinside={(*}{*)}
+  aboveskip=0.99\baselineskip,
+  belowskip=-.99\baselineskip,
+  escapeinside={(*}{*)},
 }
 
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
@@ -120,6 +124,9 @@
 %% parskip et al.                                            
 \usepackage{parskip}
 
+%% filecontents
+\usepackage{filecontents}
+
 %% The randomization package
 \usepackage[randomize,nokeeplast]{exam-randomizechoices}
 
@@ -132,6 +139,20 @@
 % without generating pdf warnings:
 \newcommand{\bs}{\texorpdfstring{\char`\\}{}}
 
+% Redefine \LaTeX a bit...
+\makeatletter
+\DeclareRobustCommand{\LaTeX}{L\kern-.25em%
+        {\sbox\z@ T%
+         \vbox to\ht\z@{\hbox{\check@mathfonts
+                              \fontsize\sf@size\z@
+                              \math@fontsfalse\selectfont
+                              A}%
+                        \vss}%
+        }%
+        \kern-.05em%
+        \TeX}
+\makeatother
+
 
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
@@ -143,7 +164,7 @@
 
 \cfoot[]{Page \thepage\ of \numpages}
 
-\title{The \texttt{exam-randomizechoices} package\\[2ex]\normalsize LaTeX package for creating random placed choices in multiple choice \\environments using the \texttt{exam} document class}
+\title{The \texttt{exam-randomizechoices} package\\[2ex]\normalsize \LaTeX{} package for creating random placed choices in multiple choice \\environments using the \texttt{exam} document class}
 
 \author{Jesse op den Brouw\\
   Department of Electrical Engineering\\
@@ -165,7 +186,7 @@
 \begin{center}
   \small
   This is the user's guide for version~\styversion{} [\stydate] of the
-  \verb|exam-randomizechoices| package. 
+  \verb|exam-randomizechoices| package (updated version)
 \end{center}
 
 \clearpage
@@ -221,7 +242,7 @@ to the author.
 
 Please use a recent version of the \texttt{exam} document class. This
 package is tested with version 2.603 which is available in most distributions.
-Testing with version 2.605\$\bs beta\$ is planned.
+Testing with version 2.606\$\bs beta\$ is planned.
 
 \subsection{A word about reading this document}
 This document uses terminology which is described below:
@@ -461,6 +482,7 @@ which typesets to:
 The \texttt{oneparcheckboxes} environment typesets the choices
 in al linear, horizontal way. An example is given below:
 
+
 \begin{lstlisting}
 \question[5] What is the result of $1+2$?
 
@@ -636,7 +658,7 @@ is the default behaviour of the package.
 \end{description}
 
 Sometimes you want the last given item to stick on its place. This is useful
-if you want to use an choice item if none of the other choices are correct:
+if you want to use a choice item if none of the other choices are correct:
 
 \begin{lstlisting}
 \question[5] What is the result of $2+5$?
@@ -729,7 +751,7 @@ multiple choice environments now accept arguments just as their randomizing
 counterparts do.
 
 
-\subsection{Seeding rhe pseudo random generator}
+\subsection{Seeding the pseudo random generator}
 \label{sec:seeding}
 To get a consistent randomization, you must seed the pseudo random generator
 with the same seed every time you compile your document. You can set the
@@ -738,7 +760,7 @@ argument that is an integer between 0 and $2^{31}-1$, \TeX's largest integer.
 Internally, the PGF macro \texttt{\bs pgfmathsetseed} is called, and it is
 flagged that you applied a seed. If you fail to do so, the seeding value is
 \texttt{\bs time}$\times$\texttt{\bs year} as stated by the PFG manual%
-\footnote{Version 3.0.1a, page 940.}. \LaTeX\ compilers keep track of
+\footnote{Version 3.1.3, page 1024.}. \LaTeX\ compilers keep track of
 time by an integer that holds the minutes counted since midnight. The integer is
 incremented every time the time passes a minute boundary. So the scenario
 can be that you compile your document a couple of times with no apparent
@@ -779,7 +801,7 @@ The key table is typeset using the \texttt{tabular}
 environment, so it can be wrapped in a \texttt{table} environment.
 
 An example of a key table is presented below. Note the \textbf{??} in the
-Answer column. This is the result of using the standard multiple choice
+Key column. This is the result of using the standard multiple choice
 environments (they are not overloaded, so no label is applied).
 
 \printkeytable
@@ -858,59 +880,160 @@ labelling mechanism supports only at the question level.
 
 \subsection{Verbatim environments}
 Verbatim environments such as \texttt{verbatim} and \texttt{lstlistings}
-are currently \emph{not} supported in the new and (overloaded) standard multiple
+are \emph{not} supported in the new and overloaded standard multiple
 choice environments. This is due to the way the contents of these environments
-are collected. The \texttt{\bs verb} command is also not supported by the package
-but \texttt{\bs lstinline} is. An example, translated to English from a Dutch exam
-on the ATmega32 microcontroller chip:
+are collected. The contents is first read by \TeX{} and spaces at the end
+of a line are removed, and the end-of-line character is replaced by a space.
+This will disrupt the formatted code in the verbatim environments.
+There is extensive discussion on StackExchange on how to tackle this problem.
+One could use a \texttt{verbatimbox} environment which puts the contents in
+a box, or one could use the \texttt{VerbatimOut} environment which writes
+the contents to a file for later inclusion. A portable solution would
+be to write contents to (separate) files and include them. In the following
+example using the \texttt{filecontents*} environment, four temporary files
+are created and included using the \verb|\lstinputlisting| macro.
 
 \begin{lstlisting}
+% Use \usepackage{filecontents} in preamble
+%
 \question[5]
-The individual pins of Port D can be configured as input or output.
-The single bits of Port D are called PD7, PD6, PD5, PD4, PD3, PD2,
-PD1 and PD0. Which of the following alternatives configures PD0, PD1,
-PD6 and PD7 as output and the remaining pins as input?
+Which of the four alternative computes the sum of the integers 1
+to 10 (inclusive)?
+
+\begin{filecontents*}{\jobname a.c}
+sum = 0;
+for (i=0; i<10; i++) {
+    sum += i;
+}
+\end{filecontents*}
+\begin{filecontents*}{\jobname b.c}
+sum = 0;
+for (i=1; i<11; i++) {
+    sum += i;
+}
+\end{filecontents*}
+\begin{filecontents*}{\jobname c.c}
+sum = 0; i = 11;
+while (i>0) {
+    sum +- i;
+    i--;
+} 
+\end{filecontents*}
+\begin{filecontents*}{\jobname d.c}
+sum = 0; i = 0;
+do {
+    sum += i;
+    i++;
+} while (i<10);
+\end{filecontents*}
 
 \begin{randomizechoices}
-\choice \lstinline|out DDRD,0x3c|
-\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
-\choice \lstinline|out PORTD,0x3c|
-\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+\choice \lstinputlisting{\jobname a.c}\par    % please use \par otherwise label get clobbered
+\CorrectChoice \lstinputlisting{\jobname b.c}\par
+\choice \lstinputlisting{\jobname c.c}\par
+\choice \lstinputlisting{\jobname d.c}\par
 \end{randomizechoices}
 \end{lstlisting}
 
-typesets possibly to:
+which will typically typeset to:
 
 \begin{questions}
-\setlength{\parskip}{0pt}
 \setcounter{question}{8}
 \question[5]
-The individual pins of Port D can be configured as input or output. The single bits
-of Port D are called PD7, PD6, PD5, PD4, PD3, PD2, PD1 and PD0. Which of the
-following alternatives configures PD0, PD1, PD6 and PD7 as output and the remaining
-pins as input?
+Which of the four alternative computes the sum of the integers 1 to 10 (inclusive)?
 
-%%Original Dutch text
-%%De individuele pinnen van Port D kunnen als ingang of uitgang geconfigureerd worden. De
-%%enkelvoudige bits van Port D worden PD7, PD6, PD5, PD4, PD3, PD2, PD1, PD0 genoemd.
-%%Welk van de volgende alternatieven configureert PD0, PD1, PD6 en PD7 als uitgang en de
-%%overige pinnen als ingang?
-%
-%\hspace*{\baselineskip}
+\begin{filecontents*}{\jobname a.c}
+sum = 0;
+for (i=0; i<10; i++) {
+    sum += i;
+}
+\end{filecontents*}
+\begin{filecontents*}{\jobname b.c}
+sum = 0;
+for (i=1; i<11; i++) {
+    sum += i;
+}
+\end{filecontents*}
+\begin{filecontents*}{\jobname c.c}
+sum = 0; i = 11;
+while (i>0) {
+    sum +- i;
+    i--;
+} 
+\end{filecontents*}
+\begin{filecontents*}{\jobname d.c}
+sum = 0; i = 0;
+do {
+    sum += i;
+    i++;
+} while (i<10);
+\end{filecontents*}
 
-\begin{randomizechoices}[norandomize]
-	\choice \lstinline|out DDRD,0x3c|
-	\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
-    \choice \lstinline|out PORTD,0x3c|
-	\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+\begin{randomizechoices}
+\choice \lstinputlisting[caption=,frame=none,numbers=none]{\jobname a.c}\par    % please use \par otherwise label get clobbered
+\CorrectChoice \lstinputlisting[caption=,frame=none,numbers=none]{\jobname b.c}\par
+\choice \lstinputlisting[caption=,frame=none,numbers=none]{\jobname c.c}\par
+\choice \lstinputlisting[caption=,frame=none,numbers=none,belowskip=0pt]{\jobname d.c}\par
 \end{randomizechoices}
+
 \end{questions}
+
+Please note that the \texttt{\bs verb} command is also not supported by the package
+but \texttt{\bs lstinline} command is.
+
+%% An example, translated to English from a Dutch exam
+%%on the ATmega32 microcontroller chip:
+%%
+%%\begin{lstlisting}
+%%\question[5]
+%%The individual pins of Port D can be configured as input or output.
+%%The single bits of Port D are called PD7, PD6, PD5, PD4, PD3, PD2,
+%%PD1 and PD0. Which of the following alternatives configures PD0, PD1,
+%%PD6 and PD7 as output and the remaining pins as input?
+%%
+%%\begin{randomizechoices}
+%%\choice \lstinline|out DDRD,0x3c|
+%%\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
+%%\choice \lstinline|out PORTD,0x3c|
+%%\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+%%\end{randomizechoices}
+%%\end{lstlisting}
+%%
+%%typesets possibly to:
+%%
+%%\begin{questions}
+%%\setlength{\parskip}{0pt}
+%%\setcounter{question}{8}
+%%\question[5]
+%%The individual pins of Port D can be configured as input or output. The single bits
+%%of Port D are called PD7, PD6, PD5, PD4, PD3, PD2, PD1 and PD0. Which of the
+%%following alternatives configures PD0, PD1, PD6 and PD7 as output and the remaining
+%%pins as input?
+%%
+%%%%Original Dutch text
+%%%%De individuele pinnen van Port D kunnen als ingang of uitgang geconfigureerd worden. De
+%%%%enkelvoudige bits van Port D worden PD7, PD6, PD5, PD4, PD3, PD2, PD1, PD0 genoemd.
+%%%%Welk van de volgende alternatieven configureert PD0, PD1, PD6 en PD7 als uitgang en de
+%%%%overige pinnen als ingang?
+%%%
+%%%\hspace*{\baselineskip}
+%%
+%%\begin{randomizechoices}[norandomize]
+%%	\choice \lstinline|out DDRD,0x3c|
+%%	\CorrectChoice \lstinline|ldi r20,0xc3| \par \lstinline|out DDRD,r20|
+%%    \choice \lstinline|out PORTD,0x3c|
+%%	\choice \lstinline|ldi r20,195| \par \lstinline|PORTD,r20|
+%%\end{randomizechoices}
+%%\end{questions}
 
 \subsection{Accessing the internal labels}
 Each \texttt{\bs question} command is accompanied with a label of the form
 \texttt{question@}$x$ as provided by the \texttt{exam} document class, where
-$x$ is the decimal number of the question. A \texttt{\bs CorrectChoice}
-command is provided with a label (by this package) of the form \linebreak \texttt{question@}$x$%
+$x$ is the decimal number of the question. Within the the environments
+\texttt{randomizechoices}, \texttt{randomizeoneparchoices}, \texttt{choices}
+(if overloaded) and \texttt{oneparchoices} (if overloaded), a
+\texttt{\bs CorrectChoice} command is provided with a label (by this package)
+of the form \texttt{question@}$x$%
 \texttt{@correctchoice} where $x$ is again the decimal number of the question.
 The user can access these labels by using the \texttt{\bs ref} command as shown
 below:
@@ -925,7 +1048,7 @@ which typesets to:
 The question number is~\ref{question@9} and the correct answer
 is~\ref{question@9@correctchoice}.
 
-There is no need to change the cat code of `@'.
+%There is no need to change the cat code of `@'.
 
 \subsection{Error messages}
 The package will throw you some error messages in case something is wrong. The
@@ -1015,10 +1138,10 @@ So when the environment is used as in:
 \choice two
 \CorrectChoice three
 \choice four
-\end{randomizechoices
+\end{randomizechoices}
 \end{lstlisting}
 
-the \texttt{\bs BODY} command now contains (comments and newlines are stripped):
+the \texttt{\bs BODY} command now contains (comments and newlines are stripped by \TeX):
 
 \begin{lstlisting}
 \choice one \choice two \CorrectChoice three \choice four
