@@ -1,9 +1,9 @@
 %%
 %% exam-randomizechoices.sty
 %%
-%% Randomize mc choices using the exam class
+%% Randomize m.c. choices using the exam class
 %%
-%% Copyright (c)2019, Jesse E. J. op den Brouw
+%% Copyright (c)2021, Jesse E. J. op den Brouw
 %%
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3
@@ -29,7 +29,12 @@
 %% J.E.J.opdenBrouw@hhs.nl
 
 %% The newest version of this package should always be available
-%% from BitBucket: https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/src/master/
+%% from GitHub: https://github.com/jesseopdenbrouw/exam-randomizechoices
+
+%% Version 0.1 [09/01/2019]: Initial release
+%% Version 0.2 [31/07/2021]: Added \savekeylist
+%%                           Adapted \printkeytable to accept optional range
+%%                           Minor cosmetic changes
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -38,8 +43,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 %% Version and date
-\gdef\fileversion{0.1}
-\gdef\filedate{2019/01/09}
+\def\fileversion{0.2}
+\def\filedate{2021/07/31}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -96,10 +101,9 @@
 %%                                                       %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % http://ctan.org/pkg/{environ,etoolbox,pgffor}
-\@ifpackageloaded{environ}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package environ already loaded}\fi}{\RequirePackage{environ}}
-\@ifpackageloaded{etoolbox}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package etoolbox already loaded}\fi}{\RequirePackage{etoolbox}}
-\@ifpackageloaded{pgffor}{\if@@ercdebug\PackageWarning{exam-randomizechoicces}{Package pgffor already loaded}\fi}{\RequirePackage{pgffor}}
-
+\RequirePackage{environ}
+\RequirePackage{etoolbox}
+\RequirePackage{pgffor}
 
 %% A scratch counter
 \newcounter{erc@counter}
@@ -276,7 +280,7 @@
     \fi
   \fi	
   %%
-  %% We travel the list items. If an item begin with the special marker
+  %% We travel the list items. If an item begins with the special marker
   %% \inaccessible, we prepend it with \correctchoice, otherwise we prepend it
   %% with \choice. At the end we have all the list items prepended with
   %% either \choice or \correctchoice. Then we append the list item to
@@ -321,8 +325,8 @@
   \fi
 
   %% Save choices environment
-  \let\@oldchoices\choices
-  \let\end@oldchoices\endchoices
+  \let\erc@oldchoices\choices
+  \let\enderc@oldchoices\endchoices
 
   %% Renew the choices environment
   \RenewEnviron{choices}[1][]{
@@ -331,10 +335,10 @@
     \erc@createrandomlist[#1]%
     %%
     %% Start the choices environment
-    \begin{@oldchoices}%
+    \begin{erc@oldchoices}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldchoices}%
+    \end{erc@oldchoices}%
   }
 
   \NewEnviron{randomizechoices}[1][]{
@@ -343,10 +347,10 @@
     \erc@createrandomlist[#1]%
     %%
     %% Start the choices environment
-    \begin{@oldchoices}%
+    \begin{erc@oldchoices}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldchoices}%
+    \end{erc@oldchoices}%
   }
 \else
   \NewEnviron{randomizechoices}[1][]{
@@ -371,8 +375,8 @@
   \fi
 
   %% Save oneparchoices environment
-  \let\@oldoneparchoices\oneparchoices
-  \let\end@oldoneparchoices\endoneparchoices
+  \let\erc@oldoneparchoices\oneparchoices
+  \let\enderc@oldoneparchoices\endoneparchoices
 
   %% Renew the oneparchoices environment
   \RenewEnviron{oneparchoices}[1][]{
@@ -381,10 +385,10 @@
     \erc@createrandomlist[#1]%
     %%
     %% Start the oneparchoices environment
-    \begin{@oldoneparchoices}%
+    \begin{erc@oldoneparchoices}%
       % Execute the list
       \erc@typesetchoices
-    \end{@oldoneparchoices}%
+    \end{erc@oldoneparchoices}%
   }
 
   \NewEnviron{randomizeoneparchoices}[1][]{
@@ -393,10 +397,10 @@
     \erc@createrandomlist[#1]%
     %%
     %% Start the oneparchoices environment
-    \begin{@oldoneparchoices}%
+    \begin{erc@oldoneparchoices}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldoneparchoices}%
+    \end{erc@oldoneparchoices}%
   }
 \else
   \NewEnviron{randomizeoneparchoices}[1][]{
@@ -421,8 +425,8 @@
   \fi
 
   %% Save choices environment
-  \let\@oldcheckboxes\checkboxes
-  \let\end@oldcheckboxes\endcheckboxes
+  \let\erc@oldcheckboxes\checkboxes
+  \let\enderc@oldcheckboxes\endcheckboxes
 
   %% Renew the oneparchoices environment
   \RenewEnviron{checkboxes}[1][]{
@@ -431,10 +435,10 @@
     \erc@createrandomlist[#1,nolabel]%
     %%
     %% Start the choices environment
-    \begin{@oldcheckboxes}%
+    \begin{erc@oldcheckboxes}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldcheckboxes}%
+    \end{erc@oldcheckboxes}%
   }
 
   \NewEnviron{randomizecheckboxes}[1][]{%
@@ -443,10 +447,10 @@
     \erc@createrandomlist[#1,nolabel]%
     %%
     %% Start the choices environment
-    \begin{@oldcheckboxes}%
+    \begin{erc@oldcheckboxes}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldcheckboxes}%
+    \end{erc@oldcheckboxes}%
   }
 \else
   \NewEnviron{randomizecheckboxes}[1][]{
@@ -471,8 +475,8 @@
   \fi
 
   %% Save oneparcheckboxes environment
-  \let\@oldoneparcheckboxes\oneparcheckboxes
-  \let\end@oldoneparcheckboxes\endoneparcheckboxes
+  \let\erc@oldoneparcheckboxes\oneparcheckboxes
+  \let\enderc@oldoneparcheckboxes\endoneparcheckboxes
 
   %% Renew the oneparcheckboxes environment
   \RenewEnviron{oneparcheckboxes}[1][]{
@@ -481,10 +485,10 @@
     \erc@createrandomlist[#1,nolabel]%
     %%
     %% Start the oneparcheckboxes environment
-    \begin{@oldoneparcheckboxes}%
+    \begin{erc@oldoneparcheckboxes}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldoneparcheckboxes}%
+    \end{erc@oldoneparcheckboxes}%
   }
 
   \NewEnviron{randomizeoneparcheckboxes}[1][]{%
@@ -493,10 +497,10 @@
     \erc@createrandomlist[#1,nolabel]%
     %%
     %% Start the oneparcheckboxes environment
-    \begin{@oldoneparcheckboxes}%
+    \begin{erc@oldoneparcheckboxes}%
       % Execute the list
       \erc@typesetchoices%
-    \end{@oldoneparcheckboxes}%
+    \end{erc@oldoneparcheckboxes}%
   }
 \else
   \NewEnviron{randomizeoneparcheckboxes}[1][]{%
@@ -513,13 +517,28 @@
 \fi
 
 %%
-%% Simple key table printer
+%% Simple key table printer, with key range
 %%
 %% Building a table with \foreach from the pgffor package is hard to do.
 %% See https://tex.stackexchange.com/questions/367979/latex-foreach-in-tabular-environment
 %% So we use \gappto and \xappto to build the table. At the end, we expand the macro
 %%
-\newcommand{\printkeytable}{%
+
+\newcounter{erc@printstart}\setcounter{erc@printstart}{0}
+\newcounter{erc@printstop}\setcounter{erc@printstop}{0}
+
+\newcommand{\printkeytable}[1][-]{%
+  \erc@printkeytable#1\@nil%
+}
+
+\def\erc@printkeytable#1-#2\@nil{%
+  %% Grab arguments
+  \setcounter{erc@printstart}{0#1}%
+  \setcounter{erc@printstop}{0#2}%
+  %% Sanity check
+  \ifnum\value{erc@printstart}<1\setcounter{erc@printstart}{1}\fi%
+  \ifnum\value{erc@printstop}<1\setcounter{erc@printstop}{\thequestion}\fi%
+  \ifnum\value{erc@printstop}>\thequestion\setcounter{erc@printstop}{\thequestion}\fi%
   \if@@ercdebug
     \PackageWarning{exam-randomizechoices}{Writing key table}%
   \fi
@@ -527,14 +546,15 @@
   \xdef\erc@keytable{}%
   %%
   %% Add the preamble of the table {regular tabular}
-  \gappto\erc@keytable{\begin{tabular} {|c|c|} \hline}%
+  \gappto\erc@keytable{\begin{tabular}[t] {|c|c|} \hline}%
   \xappto\erc@keytable{\erc@keylistquestionname\space & \erc@keylistkeyname}%
   \gappto\erc@keytable{ \\ \hline}%
   %%
   %% Write the table entries.
   \ifnum\thequestion=0\relax
   \else
-    \foreach \x in {1,...,\thequestion} {%
+%    \foreach \x in {1,...,\thequestion} {%
+    \foreach \x in {\arabic{erc@printstart},...,\arabic{erc@printstop}} {%
       %%
       %% Add '\ref{question@\x} & ', \x should be expandend, \ref not 
       \gappto\erc@keytable{\ref}%
@@ -609,6 +629,37 @@
   \else
     \PackageError{exam-randomizechoices}{Cannot write key list file}{The writing of files is disabled by the system, so no key list file is generated.}%
   \fi
+}
+
+%%
+%% Simple key list saver. Saves the key list in a macro
+%%
+\def\savekeylist{\@ifnextchar[{\erc@savekeylist}{\erc@savekeylist[\keylist]}}%
+\def\erc@savekeylist[#1]{%
+    %%
+    \if@@ercdebug
+      \PackageWarning{exam-randomizechoices}{Saving key list to macro}%
+    \fi
+    %%
+    %% Create a command that has all the question numbers / question keys
+    %% separated by a / (but nothing if there are no questions)
+    \ifnum\thequestion=0\relax
+      \gdef\erc@keylist{}%
+    \else
+      %% Write the list entries.
+      \gdef\erc@keylist{\@gobble}%
+      \foreach \x in {1,...,\thequestion} {%
+        \@ifundefined{r@question@\x @correctchoice}{%
+          %not found
+          \xdef\erc@keylist{\erc@keylist,\x/?}%
+        }{%
+          %found
+         \xdef\erc@keylist{\erc@keylist,\x/\getrefnumber{question@\x @correctchoice}}%
+        }%
+      }%
+    \fi%
+    %% Save the keylist in the supplied macro
+    \expandafter\xdef\expandafter#1\expandafter{\erc@keylist}%
 }
 
 \endinput

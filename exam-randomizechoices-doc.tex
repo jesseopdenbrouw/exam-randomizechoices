@@ -12,7 +12,7 @@
 %% The package itself is in the file exam-randomizechoices.sty.
 
 
-%% Copyright (c)2019, Jesse E. J. op den Brouw
+%% Copyright (c)2021, Jesse E. J. op den Brouw
 %%
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3
@@ -38,23 +38,22 @@
 %% J.E.J.opdenBrouw@hhs.nl
 
 %% The newest version of this package should always be available
-%% from BitBucket: https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/src/master/
+%% from GitHub: https://github.com/jesseopdenbrouw/exam-randomizechoices
 
 %--------------------------------------------------------------------
 %--------------------------------------------------------------------
 
 \documentclass[12pt,a4paper]{exam}
 
-\newcommand{\styversion}{\fileversion}
-\newcommand{\stydate}{\filedate}
-\newcommand{\docdate}{June 22, 2019}
-%\newcommand{\docdate}{Draft: \today}
+\newcommand{\styversion}{0.2}
+\newcommand{\stydate}{July 31, 2021}
+\newcommand{\docdate}{July 31, 2021}
 
 \usepackage{mathtools}
 %\usepackage{amssymb}
 
 %% Set input encoding to UTF-8
-\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
 %% Use T1 output font encoding
 \usepackage[T1]{fontenc}
 
@@ -125,7 +124,7 @@
 \usepackage{parskip}
 
 %% filecontents
-\usepackage{filecontents}
+%\usepackage{filecontents}
 
 %% The randomization package
 \usepackage[randomize,nokeeplast]{exam-randomizechoices}
@@ -186,7 +185,7 @@
 \begin{center}
   \small
   This is the user's guide for version~\styversion{} [\stydate] of the
-  \verb|exam-randomizechoices| package (updated version)
+  \verb|exam-randomizechoices| package.
 \end{center}
 
 \clearpage
@@ -226,9 +225,10 @@ implied warranties of merchantability and fitness for a
 particular purpose.
 
 \subsection{Where to find}
-The development version of this package is available on BitBucket. See
+The development version of this package is available on GitHub. See
 
-\url{https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/}
+%\url{https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/}
+\url{https://github.com/jesseopdenbrouw/exam-randomizechoices}
 
 \subsection{Acknowledgements}
 The author wishes to thank the developers of the \verb|exam| document
@@ -760,7 +760,7 @@ argument that is an integer between 0 and $2^{31}-1$, \TeX's largest integer.
 Internally, the PGF macro \texttt{\bs pgfmathsetseed} is called, and it is
 flagged that you applied a seed. If you fail to do so, the seeding value is
 \texttt{\bs time}$\times$\texttt{\bs year} as stated by the PFG manual%
-\footnote{Version 3.1.3, page 1024.}. \LaTeX\ compilers keep track of
+\footnote{Version 3.1.9a, page 1046.}. \LaTeX\ compilers keep track of
 time by an integer that holds the minutes counted since midnight. The integer is
 incremented every time the time passes a minute boundary. So the scenario
 can be that you compile your document a couple of times with no apparent
@@ -800,11 +800,27 @@ table entry will contain \textbf{??}, otherwise it will contain the used typeset
 The key table is typeset using the \texttt{tabular}
 environment, so it can be wrapped in a \texttt{table} environment.
 
+The \texttt{\bs printkeytable} macro accepts an optional range as in:
+\begin{lstlisting}
+\printkeytable[21-40]
+\end{lstlisting}
+
+It will typeset only the keys in this range. This is useful for generating
+side-by-side key tables. The start question number may be omitted, in which
+case the table starts at 1. The end question number may be omitted, in which
+case the table will be typeset up to the last question.
+
 An example of a key table is presented below. Note the \textbf{??} in the
 Key column. This is the result of using the standard multiple choice
 environments (they are not overloaded, so no label is applied).
 
+Usage of \texttt{\bs printkeytable}
+
 \printkeytable
+
+Usage of \texttt{\bs printkeytable[...-...]}
+
+\printkeytable[1-3]\quad\printkeytable[4-6]\quad\printkeytable[7-8]
 
 The text in the table header row can be changed using two command: the command
 \texttt{\bs keylistquestionname} sets the text above the question numbers, which
@@ -815,6 +831,39 @@ above the keys, which defaults to ``Key''. A typical use could be:
 \keylistquestionname{Exercise}
 \keylistkeyname{Answer Key}
 \end{lstlisting}
+
+\subsection{Saving the keys to a macro}
+It is possible to save the question numbers and the corresponding keys to
+a macro. Please note that only the environments \texttt{randomizechoices},
+\texttt{randomizeoneparchoices}, \texttt{choices} (if overloaded) and
+\texttt{oneparchoices} (if overloaded) can have valid keys in the key list.
+
+Saving a key list file is started by the command:
+
+\begin{lstlisting}
+\savekeylist[(*\textsl{\textrm{command name}}*)]
+\end{lstlisting}
+
+The optional argument is the macro name, including the \bs. if none is
+supplied, it defaults to \texttt{\bs keylist}
+The key list itself is constructed as a comma-separated list. The question
+number and answer keys are separated with a `/'. This makes it easy to
+parse the list with PGF's \texttt{\bs foreach} command (using \texttt{\bs
+mykeylist} as command name):
+
+\savekeylist[\mykeylist]
+
+\begin{lstlisting}
+\foreach \num/\key in \mykeylist {
+	\textcolor{green!\num0!red} {question \num\ has key \key} \\
+}
+\end{lstlisting}
+
+which typesets to:
+
+\foreach \num/\key in \mykeylist {
+	\textcolor{green!\num0!red} {question \num\ has key \key} \\
+}
 
 \subsection{Writing the keys to a file}
 The package provides the writing of the keys to the file.
@@ -837,7 +886,7 @@ that assigns the key list to the supplied command name (in this case
 \texttt{\bs mykeylist}).
 
 \writekeylist{\mykeylist}
-\vspace*{\baselineskip}
+%\vspace*{\baselineskip}
 \lstinputlisting[caption=]{\jobname.keylist}
 
 \vspace*{1.5\baselineskip}
@@ -1240,7 +1289,7 @@ I've been using the \texttt{exam} document class for five years now. What I like
 is the consistent typesetting of my exams. I don't use sub parts and sub-sub parts
 because in my opinion this not the right way to prepare an exam. I've written a
 department consistent class that provides the department's cover pages and some
-other typesetting trickery. This class is used by a small core \TeX\ users. Regrettably,
+other typesetting trickery. This class is used by a small core of \TeX\ users. Regrettably,
 the majority of my colleagues use Word *cough*.
 
 \end{document}

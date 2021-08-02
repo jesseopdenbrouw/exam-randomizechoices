@@ -3,7 +3,7 @@
 %%
 %% Randomize mc choices using the exam class -- examples
 %%
-%% Copyright (c)2019, Jesse E. J. op den Brouw
+%% Copyright (c)2021, Jesse E. J. op den Brouw
 %%
 %% This work may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either version 1.3
@@ -29,21 +29,23 @@
 %% J.E.J.opdenBrouw@hhs.nl
 
 %% The newest version of this package should always be available
-%% from BitBucket: https://bitbucket.org/jesseopdenbrouw/exam-randomizechoices/src/master/
+%% from GitHub: https://github.com/jesseopdenbrouw/exam-randomizechoices
 
 \documentclass[answers,addpoints]{exam}
 
 \usepackage{parskip}
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 \usepackage{mathtools}
-
-\usepackage[debug,randomize,nokeeplast]{exam-randomizechoices}
 \usepackage[a4paper]{geometry}
 
+\usepackage[debug,randomize,nokeeplast]{exam-randomizechoices}
 \setrandomizerseed{999}
 
-%%\checkboxchar{\thecheckbox}
-%%\checkedchar{\thecheckbox}
+
+
+\usepackage{amssymb}
+\checkboxchar{$\square$}
+\checkedchar{$\raisebox{0.3ex}{\checkmark}\hspace{-0.95em}\square$}
 
 \CorrectChoiceEmphasis{\color{red}\slshape}
 
@@ -351,35 +353,35 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{oneparchoices}
 
-%%%%%%%%21
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-%%%\begin{randomizechoices}[norandom,random,nokeeplast,keeplast]
-\begin{randomizechoices}
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{randomizechoices}
-
-%%%%%%%%22
-\question[5]
-One of these things is not like the others; one of these
-things is not the same. Which one is different?
-
-%%%\begin{randomizechoices}[norandom,random,nokeeplast,keeplast]
-\begin{randomizechoices}
-\choice John
-\choice Paul
-\choice George
-\choice Ringo
-\CorrectChoice Socrates
-\end{randomizechoices}
-
 %%%%%%%%23
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+%%%\begin{randomizechoices}[norandom,random,nokeeplast,keeplast]
+\begin{randomizechoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizechoices}
+
+%%%%%%%%24
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+%%%\begin{randomizechoices}[norandom,random,nokeeplast,keeplast]
+\begin{randomizechoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizechoices}
+
+%%%%%%%%25
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -392,7 +394,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{choices}
 
-%%%%%%%%24
+%%%%%%%%26
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -405,7 +407,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{randomizeoneparchoices}
 
-%%%%%%%%25
+%%%%%%%%27
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -418,7 +420,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{oneparchoices}
 
-%%%%%%%%26
+%%%%%%%%28
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -431,7 +433,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{randomizecheckboxes}
 
-%%%%%27
+%%%%%29
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -444,7 +446,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{checkboxes}
 
-%%%%%%%%28
+%%%%%%%%30
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -457,7 +459,7 @@ things is not the same. Which one is different?
 \CorrectChoice Socrates
 \end{randomizeoneparcheckboxes}
 
-%%%%%29
+%%%%%31
 \question[5]
 One of these things is not like the others; one of these
 things is not the same. Which one is different?
@@ -469,6 +471,582 @@ things is not the same. Which one is different?
 \choice Ringo
 \CorrectChoice Socrates
 \end{oneparcheckboxes}
+
+%%%%%32+
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+\question[5]
+One of these things is not like the others; one of these
+things is not the same. Which one is different?
+
+\begin{randomizeoneparchoices}
+\choice John
+\choice Paul
+\choice George
+\choice Ringo
+\CorrectChoice Socrates
+\end{randomizeoneparchoices}
+
 
 %%\question
 %%Proceed with the next sub-questions.
@@ -527,12 +1105,15 @@ things is not the same. Which one is different?
 
 Key table
 
-\printkeytable
+\printkeytable[1-30]\quad\printkeytable[31-60]\quad\printkeytable[61-83]
 
 \writekeylist[testfile.txt]{\mykeylist}
 \writekeylist{\mykeylist}
 
+\savekeylist[\yesthekeylist]
 
+{\color{red}\ttfamily\yesthekeylist}
 
+That's all folks!
 \end{document}
 
